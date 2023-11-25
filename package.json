@@ -1,0 +1,23 @@
+{
+    "name": "valkyrie",
+    "version": "0.0.1",
+    "bin": {
+        "valkyrie": "bin/valkyrie"
+    },
+    "scripts": {
+        "lint": "eslint .",
+        "bd": "bun build ./src/valkyrie.ts --compile --outfile ./bin/valkyrie",
+        "out": "bun build ./src/valkyrie.ts --compile --outfile ./bin/valkyrie && sudo cp ./bin/valkyrie /usr/local/bin/"
+    },
+    "dependencies": {
+        "chalk": "^5.3.0",
+        "inquirer": "^9.2.12"
+    },
+    "devDependencies": {
+        "@types/inquirer": "^9.0.7",
+        "@typescript-eslint/eslint-plugin": "^6.10.0",
+        "@typescript-eslint/parser": "^6.10.0",
+        "bun-types": "^1.0.8",
+        "eslint": "^8.53.0"
+    }
+}
