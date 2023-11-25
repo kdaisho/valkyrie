@@ -6,5 +6,5 @@ if (command === 'run') {
     const file = Bun.file(args[0])
     const text = await file.text()
 
-    console.log(parseAndGenerate(text))
+    console.log('VALKYRIE:', parseAndGenerate(text))
 }

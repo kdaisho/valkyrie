@@ -10,6 +10,11 @@ export const isLineBreak = (char: string) => char === LINE_BREAK
 
 export const isLetter = (char: string) => LETTER.test(char)
 
-export const isWhitespace = (char: string) => WHITESPACE.test(char)
+export const isWhitespace = (char?: string) => {
+    if (char === undefined) return false
+    return WHITESPACE.test(char)
+}
 
 export const isNumber = (char: string) => NUMBER.test(char)
+
+export const isWord = (char: string) => isLetter(char) || isNumber(char)
