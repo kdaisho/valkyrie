@@ -42,6 +42,7 @@ export default function (ast: Ast) {
             const closingTag = '</' + heading[element.value.length] + '>'
             html += openingTag + content + closingTag
             counter++
+            continue
         }
 
         if (ast[counter].type === 'Text') {
@@ -50,6 +51,7 @@ export default function (ast: Ast) {
             const closingTag = '</p>'
             html += openingTag + content + closingTag
             counter++
+            continue
         }
     }
 
