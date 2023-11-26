@@ -40,7 +40,6 @@ export default function (input: string) {
         }
 
         if (isLineBreak(input[cursor])) {
-            console.log('line break', tokens)
             cursor++
 
             if (tokens.length) {
