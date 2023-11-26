@@ -1,3 +1,3 @@
-<img src="./logo.webp" style="float: right; width: 90px">
+![valkyrie - the compiler](./valkyrie.webp)
 
-<h1 style="border: none">Valkyrie - the compiler</h1>
+# Valkyrie - the compiler
