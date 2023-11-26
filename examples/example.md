@@ -2,8 +2,4 @@
 
 ### Good morning Canada
 
-# Great afternoon Japan and America
-
-# It is a war
-
-Single line purity
+Alpha bravo charlie

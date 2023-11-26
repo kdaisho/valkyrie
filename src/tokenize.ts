@@ -8,7 +8,7 @@ import {
 } from './identity'
 // import { peek, pop } from './utils'
 
-export const tokenize = (input: string) => {
+export default function (input: string) {
     let cursor = 0
     let tokens = []
     const tokenCollections = []
