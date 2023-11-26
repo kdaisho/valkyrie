@@ -10,21 +10,23 @@ import {
 
 export const tokenize = (input: string) => {
     let cursor = 0
-
-    const tokens = []
+    let tokens = []
+    const tokenCollections = []
 
     while (cursor < input.length) {
         if (isPoundKey(input[cursor])) {
             let symbol = input[cursor]
-
             cursor++
+
+            if (isWhitespace(input[cursor])) {
+                cursor++
+            }
 
             while (isPoundKey(input[cursor])) {
                 symbol += input[cursor]
                 cursor++
 
                 if (isWhitespace(input[cursor])) {
-                    console.log('==>', 'current is whitespace so # is ending')
                     cursor++
                 }
             }
@@ -38,15 +40,18 @@ export const tokenize = (input: string) => {
         }
 
         if (isLineBreak(input[cursor])) {
-            console.log('==>', '======================== LINE BREAK')
+            console.log('line break', tokens)
             cursor++
+
+            if (tokens.length) {
+                tokenCollections.push(tokens)
+                tokens = []
+            }
+
             continue
         }
 
-        if (
-            isWord(input[cursor]) ||
-            (input[cursor - 1] !== '#' && isWhitespace(input[cursor]))
-        ) {
+        if (isWord(input[cursor]) || isWhitespace(input[cursor])) {
             let value = ''
             value += input[cursor]
             cursor++
@@ -60,7 +65,7 @@ export const tokenize = (input: string) => {
             }
 
             tokens.push({
-                type: 'Body',
+                type: 'Text',
                 value,
             })
 
@@ -70,5 +75,5 @@ export const tokenize = (input: string) => {
         throw new Error(`tokenize: ${input[cursor]} is not valid`)
     }
 
-    return tokens
+    return tokenCollections
 }
