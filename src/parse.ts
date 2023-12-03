@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export default function (tokenCollections: Record<string, unknown>[][]) {
-    console.log('==> PARSE INIT', tokenCollections)
-
+type Token = {
+    type: string
+    value: string
+}
+export default function (tokenCollections: Token[][]) {
     let counter = 0
     const ast = []
 
@@ -25,6 +27,11 @@ export default function (tokenCollections: Record<string, unknown>[][]) {
             element.type = 'List'
             element.value = first.value
             element.children = rest
+
+            while (tokenCollections[counter + 1]?.[0]?.type === 'List') {
+                element.children.push(tokenCollections[counter + 1]?.[1])
+                counter++
+            }
         }
 
         ast.push(element)

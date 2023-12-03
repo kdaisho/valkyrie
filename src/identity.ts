@@ -3,7 +3,7 @@ const LINE_BREAK = '\n'
 const WHITESPACE = /\s+/
 const LETTER = /[a-z]/i
 const NUMBER = /^[0-9]+$/
-const SPECIAL_CHARACTERS = /[@$%&'",.!?;:()[\]]/
+const SPECIAL_CHARACTERS = /[@$%&'",.!?;:()[\]-]/
 const HYPHEN = '-'
 
 export const isPoundKey = (char: string) => char === POUND_KEY

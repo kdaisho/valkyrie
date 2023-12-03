@@ -62,16 +62,21 @@ export default function (ast: Ast) {
 
         if (ast[counter].type === 'List') {
             const element = ast[counter] as List
-            const openingTag = '<li>'
-            const content = element.children.map(child => {
-                if (child.type === 'Text') {
-                    return child.value
-                }
-            })
-            const closingTag = '</li>'
-            html += openingTag + content + closingTag
-            counter++
-            continue
+
+            if (ast[counter].value === '-') {
+                const openingTag = '<ul>'
+                const content = element.children
+                    .map(child => {
+                        if (child.type === 'Text') {
+                            return '<li>' + child.value + '</li>'
+                        }
+                    })
+                    .join('')
+                const closingTag = '</ul>'
+                html += openingTag + content + closingTag
+                counter++
+                continue
+            }
         }
     }
 
