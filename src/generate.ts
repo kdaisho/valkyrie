@@ -24,7 +24,13 @@ type Paragraph = {
     value: string
 }
 
-type Ast = (Heading | Paragraph)[]
+type List = {
+    type: 'List'
+    value: string
+    children: Token[]
+}
+
+type Ast = (Heading | Paragraph | List)[]
 
 export default function (ast: Ast) {
     let counter = 0
@@ -49,6 +55,20 @@ export default function (ast: Ast) {
             const openingTag = '<p>'
             const content = ast[counter].value
             const closingTag = '</p>'
+            html += openingTag + content + closingTag
+            counter++
+            continue
+        }
+
+        if (ast[counter].type === 'List') {
+            const element = ast[counter] as List
+            const openingTag = '<li>'
+            const content = element.children.map(child => {
+                if (child.type === 'Text') {
+                    return child.value
+                }
+            })
+            const closingTag = '</li>'
             html += openingTag + content + closingTag
             counter++
             continue
