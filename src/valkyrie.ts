@@ -11,5 +11,5 @@ if (command === 'run') {
 
     console.log(chalk.yellow(html))
 
-    Bun.write('html/index.html', html)
+    Bun.write('output/index.html', html)
 }

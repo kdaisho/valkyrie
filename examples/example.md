@@ -12,7 +12,7 @@ The quick brown fox jumps over the lazy dog. This sentence is often used as a ty
 
 -   Wake up and feed the cat
 -   Eat breakfast
--   Brush teeth 2
+-   Brush teeth 32
 -   Go to work
 -   Go home
 

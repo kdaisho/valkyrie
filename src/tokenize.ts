@@ -15,6 +15,17 @@ export default function (input: string) {
     const tokenCollections = []
 
     while (cursor < input.length) {
+        if (isLineBreak(input[cursor])) {
+            cursor++
+
+            if (tokens.length) {
+                tokenCollections.push(tokens)
+                tokens = []
+            }
+
+            continue
+        }
+
         if (isPoundKey(input[cursor])) {
             let symbol = input[cursor]
             cursor++
@@ -36,17 +47,6 @@ export default function (input: string) {
                 type: 'Heading',
                 value: symbol,
             })
-
-            continue
-        }
-
-        if (isLineBreak(input[cursor])) {
-            cursor++
-
-            if (tokens.length) {
-                tokenCollections.push(tokens)
-                tokens = []
-            }
 
             continue
         }
