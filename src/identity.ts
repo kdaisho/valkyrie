@@ -3,8 +3,9 @@ const LINE_BREAK = '\n'
 const WHITESPACE = /\s+/
 const LETTER = /[a-z]/i
 const NUMBER = /\d+/
-const SPECIAL_CHARACTERS = /[@$%&'",.!?;:()[\]-]/
+const SPECIAL_CHARACTERS = /[@$%&'",!?;:()[\]-]/
 const HYPHEN = '-'
+const DOT = '.'
 
 export const isPoundKey = (char: string) => char === POUND_KEY
 
@@ -21,6 +22,8 @@ export const isNumber = (char: string) => NUMBER.test(char)
 
 export const isSpecialCharacters = (char: string) =>
     SPECIAL_CHARACTERS.test(char)
+
+export const isDot = (char: string) => char === DOT
 
 export const isHyphen = (char: string) => char === HYPHEN
 

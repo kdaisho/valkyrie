@@ -2,23 +2,24 @@ import {
     isPoundKey,
     isLineBreak,
     isWhitespace,
-    isWord,
+    isLetter,
     isHyphen,
     isNumber,
+    isDot,
 } from './identity'
 import { peek, pop } from './utils'
 
 export default function (input: string) {
     const chars = input.split('')
     let tokens = []
-    const ast = []
+    const lexicalTokens = []
 
     while (chars.length) {
         if (isLineBreak(chars[0])) {
             pop(chars)
 
             if (tokens.length) {
-                ast.push(tokens)
+                lexicalTokens.push(tokens)
                 tokens = []
             }
 
@@ -29,17 +30,9 @@ export default function (input: string) {
             let symbol = chars[0]
             pop(chars)
 
-            if (isWhitespace(chars[0])) {
-                pop(chars)
-            }
-
             while (isPoundKey(chars[0])) {
                 symbol += chars[0]
                 pop(chars)
-
-                if (isWhitespace(chars[0])) {
-                    pop(chars)
-                }
             }
 
             tokens.push({
@@ -71,38 +64,38 @@ export default function (input: string) {
         }
 
         if (isNumber(chars[0])) {
-            let value = chars[0]
-            let c = ''
+            let symbol = chars[0]
+            let value = ''
             pop(chars)
 
             while (isNumber(chars[0])) {
-                value += chars[0]
+                symbol += chars[0]
                 pop(chars)
             }
 
-            while (chars[0] === '.' || isWhitespace(chars[0])) {
+            while (isDot(chars[0]) || isWhitespace(chars[0])) {
                 pop(chars)
             }
 
             tokens.push({
                 type: 'Number',
-                value,
+                value: symbol,
             })
 
             while (!isLineBreak(chars[0])) {
-                c += chars[0]
+                value += chars[0]
                 pop(chars)
             }
 
             tokens.push({
                 type: 'Text',
-                value: c,
+                value,
             })
 
             continue
         }
 
-        if (isWord(chars[0])) {
+        if (isLetter(chars[0])) {
             let value = chars[0].trim()
             pop(chars)
 
@@ -122,5 +115,5 @@ export default function (input: string) {
         throw new Error(`tokenize: ${chars[0]} is not valid`)
     }
 
-    return ast
+    return lexicalTokens
 }
