@@ -12,8 +12,8 @@ The quick brown fox jumps over the lazy dog. This sentence is often used as a ty
 
 -   Wake up and feed the cat
 -   Eat breakfast
--   Brush teeth 32
--   Go to work
+-   Brush teeth 3233
+-   Go to work 232 - ss
 -   Go home
 
 In the software industry, lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum also approximates a typical distribution of spaces in English.

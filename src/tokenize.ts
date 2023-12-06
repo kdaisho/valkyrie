@@ -4,42 +4,40 @@ import {
     isWhitespace,
     isWord,
     isHyphen,
-    // isLetter,
-    // isNumber
 } from './identity'
-// import { peek, pop } from './utils'
+import { peek, pop } from './utils'
 
 export default function (input: string) {
-    let cursor = 0
+    const chars = input.split('')
     let tokens = []
-    const tokenCollections = []
+    const ast = []
 
-    while (cursor < input.length) {
-        if (isLineBreak(input[cursor])) {
-            cursor++
+    while (chars.length) {
+        if (isLineBreak(chars[0])) {
+            pop(chars)
 
             if (tokens.length) {
-                tokenCollections.push(tokens)
+                ast.push(tokens)
                 tokens = []
             }
 
             continue
         }
 
-        if (isPoundKey(input[cursor])) {
-            let symbol = input[cursor]
-            cursor++
+        if (isPoundKey(chars[0])) {
+            let symbol = chars[0]
+            pop(chars)
 
-            if (isWhitespace(input[cursor])) {
-                cursor++
+            if (isWhitespace(chars[0])) {
+                pop(chars)
             }
 
-            while (isPoundKey(input[cursor])) {
-                symbol += input[cursor]
-                cursor++
+            while (isPoundKey(chars[0])) {
+                symbol += chars[0]
+                pop(chars)
 
-                if (isWhitespace(input[cursor])) {
-                    cursor++
+                if (isWhitespace(chars[0])) {
+                    pop(chars)
                 }
             }
 
@@ -51,13 +49,12 @@ export default function (input: string) {
             continue
         }
 
-        if (isHyphen(input[cursor])) {
-            let value = ''
-            value += input[cursor]
-            cursor++
+        if (isHyphen(chars[0])) {
+            const value = chars[0]
+            pop(chars)
 
-            while (isWhitespace(input[cursor + 1])) {
-                cursor++
+            while (isWhitespace(peek(chars))) {
+                pop(chars)
             }
 
             tokens.push({
@@ -68,17 +65,20 @@ export default function (input: string) {
             continue
         }
 
-        if (isWord(input[cursor]) || isWhitespace(input[cursor])) {
-            let value = ''
-            value += input[cursor].trim()
-            cursor++
+        if (isWhitespace(chars[0])) {
+            pop(chars)
+        }
+
+        if (isWord(chars[0])) {
+            let value = chars[0].trim()
+            pop(chars)
 
             while (
-                (isWord(input[cursor]) || isWhitespace(input[cursor])) &&
-                !isLineBreak(input[cursor])
+                (isWord(chars[0]) || isWhitespace(chars[0])) &&
+                !isLineBreak(chars[0])
             ) {
-                value += input[cursor]
-                cursor++
+                value += chars[0]
+                pop(chars)
             }
 
             tokens.push({
@@ -89,8 +89,8 @@ export default function (input: string) {
             continue
         }
 
-        throw new Error(`tokenize: ${input[cursor]} is not valid`)
+        throw new Error(`tokenize: ${chars[0]} is not valid`)
     }
 
-    return tokenCollections
+    return ast
 }

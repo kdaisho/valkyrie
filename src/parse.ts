@@ -39,7 +39,7 @@ export default function (tokenCollections: Token[][]) {
         counter++
     }
 
-    console.log('==> PARSE END', ast)
+    console.log('AST:', ast)
 
     return ast
 }
