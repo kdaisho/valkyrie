@@ -4,6 +4,12 @@ export const pipe =
     (value: any) =>
         fns.reduce((acc, fn) => fn(acc), value)
 
+let last: string | undefined
+
 export const peek = (arr: string[]) => arr[1]
 
-export const pop = (arr: string[]) => arr.shift()
+export const hindsight = () => last
+
+export const pop = (arr: string[]) => {
+    last = arr.shift()
+}

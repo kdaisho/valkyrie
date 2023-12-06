@@ -24,13 +24,19 @@ type Paragraph = {
     value: string
 }
 
-type List = {
-    type: 'List'
+type UnorderedList = {
+    type: 'UnorderedList'
     value: string
     children: Token[]
 }
 
-type Ast = (Heading | Paragraph | List)[]
+type OrderedList = {
+    type: 'OrderedList'
+    value: string
+    children: Token[]
+}
+
+type Ast = (Heading | Paragraph | UnorderedList | OrderedList)[]
 
 export default function (ast: Ast) {
     let counter = 0
@@ -60,8 +66,8 @@ export default function (ast: Ast) {
             continue
         }
 
-        if (ast[counter].type === 'List') {
-            const element = ast[counter] as List
+        if (ast[counter].type === 'UnorderedList') {
+            const element = ast[counter] as UnorderedList
 
             if (ast[counter].value === '-') {
                 const openingTag = '<ul>'
@@ -73,6 +79,25 @@ export default function (ast: Ast) {
                     })
                     .join('')
                 const closingTag = '</ul>'
+                html += openingTag + content + closingTag
+                counter++
+                continue
+            }
+        }
+
+        if (ast[counter].type === 'OrderedList') {
+            const element = ast[counter] as OrderedList
+
+            if (ast[counter].value === '1') {
+                const openingTag = '<ol>'
+                const content = element.children
+                    .map(child => {
+                        if (child.type === 'Text') {
+                            return '<li>' + child.value + '</li>'
+                        }
+                    })
+                    .join('')
+                const closingTag = '</ol>'
                 html += openingTag + content + closingTag
                 counter++
                 continue

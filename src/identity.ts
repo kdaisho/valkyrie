@@ -2,7 +2,7 @@ const POUND_KEY = '#'
 const LINE_BREAK = '\n'
 const WHITESPACE = /\s+/
 const LETTER = /[a-z]/i
-const NUMBER = /^[0-9]+$/
+const NUMBER = /\d+/
 const SPECIAL_CHARACTERS = /[@$%&'",.!?;:()[\]-]/
 const HYPHEN = '-'
 

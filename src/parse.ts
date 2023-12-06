@@ -24,11 +24,22 @@ export default function (tokenCollections: Token[][]) {
         }
 
         if (first.type === 'List') {
-            element.type = 'List'
+            element.type = 'UnorderedList'
             element.value = first.value
             element.children = rest
 
             while (tokenCollections[counter + 1]?.[0]?.type === 'List') {
+                element.children.push(tokenCollections[counter + 1]?.[1])
+                counter++
+            }
+        }
+
+        if (first.type === 'Number') {
+            element.type = 'OrderedList'
+            element.value = first.value
+            element.children = rest
+
+            while (tokenCollections[counter + 1]?.[0]?.type === 'Number') {
                 element.children.push(tokenCollections[counter + 1]?.[1])
                 counter++
             }

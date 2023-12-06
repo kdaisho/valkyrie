@@ -4,6 +4,7 @@ import {
     isWhitespace,
     isWord,
     isHyphen,
+    isNumber,
 } from './identity'
 import { peek, pop } from './utils'
 
@@ -67,6 +68,41 @@ export default function (input: string) {
 
         if (isWhitespace(chars[0])) {
             pop(chars)
+        }
+
+        if (isNumber(chars[0])) {
+            let value = chars[0]
+            let c = ''
+            pop(chars)
+
+            while (isNumber(chars[0])) {
+                value += chars[0]
+                pop(chars)
+            }
+
+            while (chars[0] === '.' || isWhitespace(chars[0])) {
+                pop(chars)
+            }
+
+            tokens.push({
+                type: 'Number',
+                value,
+            })
+
+            while (
+                (isWord(chars[0]) || isWhitespace(chars[0])) &&
+                !isLineBreak(chars[0])
+            ) {
+                c += chars[0]
+                pop(chars)
+            }
+
+            tokens.push({
+                type: 'Text',
+                value: c,
+            })
+
+            continue
         }
 
         if (isWord(chars[0])) {

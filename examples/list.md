@@ -1,9 +1,17 @@
 ## Yoo nee - haa
 
-Looking at this - it's a list
+Good morning Canada
 
--   Something to do
--   Picnic and a walk
--   Plan a trip to the zoo
+### Unordered list
 
-After the list, we have a paragraph
+-   Dog
+-   Cat
+-   Mouse and cheese
+
+### Order of things
+
+1. Wake up and feed the cat
+2. Eat breakfast
+3. Brush teeth 3233
+
+Last words - [this]!
