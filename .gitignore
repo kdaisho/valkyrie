@@ -8,3 +8,5 @@ node_modules
 !.env.example
 /bin
 /output
+/examples/*
+!/examples/example.md

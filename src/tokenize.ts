@@ -89,10 +89,7 @@ export default function (input: string) {
                 value,
             })
 
-            while (
-                (isWord(chars[0]) || isWhitespace(chars[0])) &&
-                !isLineBreak(chars[0])
-            ) {
+            while (!isLineBreak(chars[0])) {
                 c += chars[0]
                 pop(chars)
             }
@@ -109,10 +106,7 @@ export default function (input: string) {
             let value = chars[0].trim()
             pop(chars)
 
-            while (
-                (isWord(chars[0]) || isWhitespace(chars[0])) &&
-                !isLineBreak(chars[0])
-            ) {
+            while (!isLineBreak(chars[0])) {
                 value += chars[0]
                 pop(chars)
             }

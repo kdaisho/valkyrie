@@ -6,7 +6,7 @@
 
 Author's - choice. (See [this]!)
 
-The quick brown fox jumps over the lazy dog. This sentence is often used as a typing exercise, testing typewriters and computer keyboards, and in other applications involving all of the letters in the English alphabet.
+The quick brown fox jumps over the lazy dog. This sentence is often used as a typing exercise, testing typewriters and computer keyboards, and in other applications involving all of the letters in the English alphabet. 343
 
 #### Things to do
 
