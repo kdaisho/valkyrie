@@ -63,7 +63,7 @@ export default function (ast: Ast) {
         if (ast[counter].type === 'List') {
             const element = ast[counter] as List
             const tag = element.value === '-' ? 'ul' : 'ol'
-            const openingTag = '<' + tag + '>'
+            const openingTag = '<' + tag + (tag === 'ol' ? ` start=${element.value}`: '') + '>'
             const content = element.children
                 .map(child => {
                     if (child.type === 'Text') {
