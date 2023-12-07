@@ -24,7 +24,7 @@ export default function (tokenCollections: Token[][]) {
         }
 
         if (first.type === 'List') {
-            element.type = 'UnorderedList'
+            element.type = 'List'
             element.value = first.value
             element.children = rest
 
@@ -35,7 +35,7 @@ export default function (tokenCollections: Token[][]) {
         }
 
         if (first.type === 'Number') {
-            element.type = 'OrderedList'
+            element.type = 'List'
             element.value = first.value
             element.children = rest
 

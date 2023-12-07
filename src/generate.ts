@@ -24,19 +24,13 @@ type Paragraph = {
     value: string
 }
 
-type UnorderedList = {
-    type: 'UnorderedList'
+type List = {
+    type: 'List'
     value: string
     children: Token[]
 }
 
-type OrderedList = {
-    type: 'OrderedList'
-    value: string
-    children: Token[]
-}
-
-type Ast = (Heading | Paragraph | UnorderedList | OrderedList)[]
+type Ast = (Heading | Paragraph | List)[]
 
 export default function (ast: Ast) {
     let counter = 0
@@ -66,42 +60,21 @@ export default function (ast: Ast) {
             continue
         }
 
-        if (ast[counter].type === 'UnorderedList') {
-            const element = ast[counter] as UnorderedList
-
-            if (ast[counter].value === '-') {
-                const openingTag = '<ul>'
-                const content = element.children
-                    .map(child => {
-                        if (child.type === 'Text') {
-                            return '<li>' + child.value + '</li>'
-                        }
-                    })
-                    .join('')
-                const closingTag = '</ul>'
-                html += openingTag + content + closingTag
-                counter++
-                continue
-            }
-        }
-
-        if (ast[counter].type === 'OrderedList') {
-            const element = ast[counter] as OrderedList
-
-            if (ast[counter].value === '1') {
-                const openingTag = '<ol>'
-                const content = element.children
-                    .map(child => {
-                        if (child.type === 'Text') {
-                            return '<li>' + child.value + '</li>'
-                        }
-                    })
-                    .join('')
-                const closingTag = '</ol>'
-                html += openingTag + content + closingTag
-                counter++
-                continue
-            }
+        if (ast[counter].type === 'List') {
+            const element = ast[counter] as List
+            const tag = element.value === '-' ? 'ul' : 'ol'
+            const openingTag = '<' + tag + '>'
+            const content = element.children
+                .map(child => {
+                    if (child.type === 'Text') {
+                        return '<li>' + child.value + '</li>'
+                    }
+                })
+                .join('')
+            const closingTag = '</' + tag + '>'
+            html += openingTag + content + closingTag
+            counter++
+            continue
         }
     }
 
