@@ -12,14 +12,14 @@ import { peek, pop } from './utils'
 export default function (input: string) {
     const chars = input.split('')
     let tokens = []
-    const lexicalTokens = []
+    const lexicalBlocks = []
 
     while (chars.length) {
         if (isLineBreak(chars[0])) {
             pop(chars)
 
             if (tokens.length) {
-                lexicalTokens.push(tokens)
+                lexicalBlocks.push(tokens)
                 tokens = []
             }
 
@@ -126,5 +126,5 @@ export default function (input: string) {
         throw new Error(`tokenize: ${chars[0]} is not valid`)
     }
 
-    return lexicalTokens
+    return lexicalBlocks
 }
