@@ -8,18 +8,13 @@ const heading: Record<number, string> = {
     6: 'h6',
 }
 
-type Token = {
-    type: string
-    value: string
-}
-
 type Heading = {
     type: 'Heading'
     value: string
-    children: Token[]
+    children: LexicalBlocks
 }
 
-type Paragraph = {
+type Text = {
     type: 'Text'
     value: string
 }
@@ -27,33 +22,39 @@ type Paragraph = {
 type List = {
     type: 'List'
     value: string
-    children: Token[]
+    children: LexicalBlocks
 }
 
-type Ast = (Heading | Paragraph | List)[]
+type Indentation = {
+    type: 'Indentation'
+    value: number
+    children: LexicalBlocks
+}
 
-export default function (ast: Ast) {
+type LexicalBlocks = (Heading | Text | List | Indentation)[]
+
+function generate(lexicalBlocks: LexicalBlocks) {
     let counter = 0
     let html = ''
 
-    while (counter < ast.length) {
-        if (ast[counter].type === 'Heading') {
-            const element = ast[counter] as Heading
-            const openingTag = '<' + heading[element.value.length] + '>'
-            const content = element.children.map(child => {
+    while (counter < lexicalBlocks.length) {
+        if (lexicalBlocks[counter].type === 'Heading') {
+            const lexicalBlock = lexicalBlocks[counter] as Heading
+            const openingTag = '<' + heading[lexicalBlock.value.length] + '>'
+            const content = lexicalBlock.children.map(child => {
                 if (child.type === 'Text') {
                     return child.value
                 }
             })
-            const closingTag = '</' + heading[element.value.length] + '>'
+            const closingTag = '</' + heading[lexicalBlock.value.length] + '>'
             html += openingTag + content + closingTag
             counter++
             continue
         }
 
-        if (ast[counter].type === 'Text') {
+        if (lexicalBlocks[counter].type === 'Text') {
             const openingTag = '<p>'
-            const content = ast[counter].value.replace(
+            const content = (lexicalBlocks[counter] as Text).value.replace(
                 /(\*\*|__)(?=\S)([^*_]+?)(?<=\S)\1/g,
                 '<strong>$2</strong>'
             )
@@ -63,19 +64,22 @@ export default function (ast: Ast) {
             continue
         }
 
-        if (ast[counter].type === 'List') {
-            const element = ast[counter] as List
-            const tag = element.value === '-' ? 'ul' : 'ol'
+        if (lexicalBlocks[counter].type === 'List') {
+            const lexicalBlock = lexicalBlocks[counter] as List
+            const tag = lexicalBlock.value === '-' ? 'ul' : 'ol'
             const openingTag =
                 '<' +
                 tag +
-                (tag === 'ol' ? ` start=${element.value}` : '') +
+                (tag === 'ol' ? ` start=${lexicalBlock.value}` : '') +
                 '>'
-            const content = element.children
+
+            const content = lexicalBlock.children
                 .map(child => {
                     if (child.type === 'Text') {
                         return '<li>' + child.value + '</li>'
                     }
+
+                    return generate([child])
                 })
                 .join('')
             const closingTag = '</' + tag + '>'
@@ -87,3 +91,5 @@ export default function (ast: Ast) {
 
     return html
 }
+
+export default generate

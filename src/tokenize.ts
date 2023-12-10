@@ -5,23 +5,50 @@ import {
     isHyphen,
     isNumber,
     isDot,
-    isWord,
+    isCharacter,
 } from './identity'
 import { peek, pop } from './utils'
 
 export default function (input: string) {
     const chars = input.split('')
+    let indentation = 0
     let tokens = []
     const lexicalBlocks = []
 
     while (chars.length) {
+        if (indentation >= 2) {
+            indentation = 0
+
+            tokens.push({
+                type: 'Indentation',
+                value: indentation,
+            })
+
+            continue
+        }
+
         if (isLineBreak(chars[0])) {
             pop(chars)
+
+            if (indentation >= 2) {
+                tokens.push({
+                    type: 'Indentation',
+                    value: indentation,
+                })
+                indentation = 0
+            }
 
             if (tokens.length) {
                 lexicalBlocks.push(tokens)
                 tokens = []
             }
+
+            continue
+        }
+
+        if (isWhitespace(chars[0])) {
+            indentation++
+            pop(chars)
 
             continue
         }
@@ -70,10 +97,6 @@ export default function (input: string) {
             continue
         }
 
-        if (isWhitespace(chars[0])) {
-            pop(chars)
-        }
-
         if (isNumber(chars[0])) {
             let symbol = chars[0]
             let value = ''
@@ -113,7 +136,7 @@ export default function (input: string) {
             continue
         }
 
-        if (isWord(chars[0])) {
+        if (isCharacter(chars[0])) {
             let value = chars[0]
             pop(chars)
 

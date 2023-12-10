@@ -1,6 +1,6 @@
 const POUND_KEY = '#'
 const LINE_BREAK = '\n'
-const WHITESPACE = /\s+/
+const WHITESPACE = / / // '\s' includes line break ('\n') so we use ' ' instead
 const LETTER = /[a-z]/i
 const NUMBER = /\d+/
 const SPECIAL_CHARACTERS = /^[_@$%&'",!?;:()[\]\-*]+$/
@@ -27,5 +27,5 @@ export const isDot = (char: string) => char === DOT
 
 export const isHyphen = (char: string) => char === HYPHEN
 
-export const isWord = (char: string) =>
+export const isCharacter = (char: string) =>
     isLetter(char) || isNumber(char) || isSpecialCharacters(char)
