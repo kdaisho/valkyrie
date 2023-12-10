@@ -2,10 +2,10 @@ import {
     isPoundKey,
     isLineBreak,
     isWhitespace,
-    isLetter,
     isHyphen,
     isNumber,
     isDot,
+    isWord,
 } from './identity'
 import { peek, pop } from './utils'
 
@@ -54,17 +54,17 @@ export default function (input: string) {
             continue
         }
 
-        if (isHyphen(chars[0])) {
-            const value = chars[0]
+        if (isHyphen(chars[0]) && isWhitespace(peek(chars))) {
+            const symbol = chars[0]
             pop(chars)
 
-            while (isWhitespace(peek(chars))) {
+            while (isWhitespace(chars[0])) {
                 pop(chars)
             }
 
             tokens.push({
                 type: 'List',
-                value,
+                value: symbol,
             })
 
             continue
@@ -84,16 +84,23 @@ export default function (input: string) {
                 pop(chars)
             }
 
-            while (isDot(chars[0]) || isWhitespace(chars[0])) {
+            let isList = false
+
+            while (isDot(chars[0]) && isWhitespace(peek(chars))) {
+                isList = true
                 pop(chars)
             }
 
-            tokens.push({
-                type: 'Number',
-                value: symbol,
-            })
+            if (isList) {
+                tokens.push({
+                    type: 'Number',
+                    value: symbol,
+                })
+            } else {
+                value += symbol
+            }
 
-            while (!isLineBreak(chars[0])) {
+            while (!isLineBreak(chars[0]) && chars.length) {
                 value += chars[0]
                 pop(chars)
             }
@@ -106,11 +113,11 @@ export default function (input: string) {
             continue
         }
 
-        if (isLetter(chars[0])) {
-            let value = chars[0].trim()
+        if (isWord(chars[0])) {
+            let value = chars[0]
             pop(chars)
 
-            while (!isLineBreak(chars[0])) {
+            while (!isLineBreak(chars[0]) && chars.length) {
                 value += chars[0]
                 pop(chars)
             }
@@ -125,6 +132,13 @@ export default function (input: string) {
 
         throw new Error(`tokenize: ${chars[0]} is not valid`)
     }
+
+    if (!chars.length && tokens.length) {
+        lexicalBlocks.push(tokens)
+        tokens = []
+    }
+
+    console.log('==> LEXICAL BLOCKS', lexicalBlocks)
 
     return lexicalBlocks
 }

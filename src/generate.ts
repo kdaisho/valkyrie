@@ -53,7 +53,10 @@ export default function (ast: Ast) {
 
         if (ast[counter].type === 'Text') {
             const openingTag = '<p>'
-            const content = ast[counter].value
+            const content = ast[counter].value.replace(
+                /(\*\*|__)(?=\S)([^*_]+?)(?<=\S)\1/g,
+                '<strong>$2</strong>'
+            )
             const closingTag = '</p>'
             html += openingTag + content + closingTag
             counter++
@@ -63,7 +66,11 @@ export default function (ast: Ast) {
         if (ast[counter].type === 'List') {
             const element = ast[counter] as List
             const tag = element.value === '-' ? 'ul' : 'ol'
-            const openingTag = '<' + tag + (tag === 'ol' ? ` start=${element.value}`: '') + '>'
+            const openingTag =
+                '<' +
+                tag +
+                (tag === 'ol' ? ` start=${element.value}` : '') +
+                '>'
             const content = element.children
                 .map(child => {
                     if (child.type === 'Text') {

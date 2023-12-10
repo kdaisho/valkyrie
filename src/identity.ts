@@ -3,7 +3,7 @@ const LINE_BREAK = '\n'
 const WHITESPACE = /\s+/
 const LETTER = /[a-z]/i
 const NUMBER = /\d+/
-const SPECIAL_CHARACTERS = /[@$%&'",!?;:()[\]-]/
+const SPECIAL_CHARACTERS = /^[_@$%&'",!?;:()[\]\-*]+$/
 const HYPHEN = '-'
 const DOT = '.'
 
