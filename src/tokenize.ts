@@ -5,7 +5,7 @@ import {
     isHyphen,
     isNumber,
     isDot,
-    isWord,
+    isCharacter,
 } from './identity'
 import { peek, pop } from './utils'
 
@@ -113,7 +113,7 @@ export default function (input: string) {
             continue
         }
 
-        if (isWord(chars[0])) {
+        if (isCharacter(chars[0])) {
             let value = chars[0]
             pop(chars)
 

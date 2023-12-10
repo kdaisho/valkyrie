@@ -27,5 +27,5 @@ export const isDot = (char: string) => char === DOT
 
 export const isHyphen = (char: string) => char === HYPHEN
 
-export const isWord = (char: string) =>
+export const isCharacter = (char: string) =>
     isLetter(char) || isNumber(char) || isSpecialCharacters(char)
