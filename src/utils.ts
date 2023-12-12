@@ -13,3 +13,38 @@ export const hindsight = () => last
 export const pop = (arr: string[]) => {
     last = arr.shift()
 }
+
+export const getLeafNode = (node: {
+    children?: Record<string, unknown>[]
+}): Record<string, unknown> => {
+    console.log('==> INIT', node)
+    while (node.children?.length) {
+        console.log('==> NODD', node)
+        node.children.forEach(ch => {
+            console.log('==> CCCC', ch)
+            if (ch.type === 'List') {
+                getLeafNode(ch)
+                node = children[0]
+            }
+        })
+    }
+    console.log('==> N', node)
+    return node
+}
+
+export function getLeafNodes(rootNode) {
+    let last = null
+    function traverse(acc, node) {
+        if (node.children) {
+            last = node
+            return node.children.reduce(traverse, acc)
+        } else {
+            return last
+        }
+
+        acc.push(node)
+        return acc
+    }
+
+    return traverse([], rootNode)
+}

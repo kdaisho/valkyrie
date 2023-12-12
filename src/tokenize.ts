@@ -11,32 +11,33 @@ import { peek, pop } from './utils'
 
 export default function (input: string) {
     const chars = input.split('')
-    let indentation = 0
+    let depth = 0
     let tokens = []
     const lexicalBlocks = []
 
     while (chars.length) {
-        if (indentation >= 2) {
-            indentation = 0
+        // if (depth >= 2) {
+        //     tokens.push({
+        //         type: 'Indentation',
+        //         value: depth,
+        //     })
+        //     depth = 0
 
-            tokens.push({
-                type: 'Indentation',
-                value: indentation,
-            })
-
-            continue
-        }
+        //     continue
+        // }
 
         if (isLineBreak(chars[0])) {
             pop(chars)
 
-            if (indentation >= 2) {
-                tokens.push({
-                    type: 'Indentation',
-                    value: indentation,
-                })
-                indentation = 0
-            }
+            depth = 0
+
+            // if (depth >= 2) {
+            //     tokens.push({
+            //         type: 'Indentation',
+            //         value: depth,
+            //     })
+            //     depth = 0
+            // }
 
             if (tokens.length) {
                 lexicalBlocks.push(tokens)
@@ -47,7 +48,7 @@ export default function (input: string) {
         }
 
         if (isWhitespace(chars[0])) {
-            indentation++
+            depth++
             pop(chars)
 
             continue
@@ -92,6 +93,7 @@ export default function (input: string) {
             tokens.push({
                 type: 'List',
                 value: symbol,
+                depth,
             })
 
             continue
@@ -148,6 +150,7 @@ export default function (input: string) {
             tokens.push({
                 type: 'Text',
                 value,
+                // depth,
             })
 
             continue
