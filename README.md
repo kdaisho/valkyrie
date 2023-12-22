@@ -2,7 +2,7 @@
 
 # Valkyrie - The compiler
 
-Valkyrie is a compiler that takes a markdown file and converts them into an HTML file. It is built on top of [Bun.js](https://bun.sh/).
+Valkyrie is a compiler that takes a markdown file and converts them into an HTML file. It is built on top of Bun.js.
 
 ## Required
 
@@ -22,7 +22,7 @@ bun bd
 ```bash
 bun link
 ```
-- Run valkyrie against an example file
+4. Run valkyrie against an example file
 ```bash
 valkyrie run ./examples/examples.md
 ```
