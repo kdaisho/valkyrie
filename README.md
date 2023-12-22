@@ -2,7 +2,34 @@
 
 # Valkyrie - The compiler
 
-## Regular expression used to render <strong></strong> tags
+Valkyrie is a compiler that takes a markdown file and converts them into an HTML file. It is built on top of [Bun.js](https://bun.sh/).
+
+## Required
+
+[Bun.js](https://bun.sh/)
+
+## Try it out
+
+1. Install dependencies (either `bun install` or `npm install` should work)
+```bash
+pnpm install
+```
+2. Build
+```bash
+bun bd
+```
+3. Register the current package (valkyrie) as a "linkable" package.
+```bash
+bun link
+```
+- Run valkyrie against an example file
+```bash
+valkyrie run ./examples/examples.md
+```
+
+
+## Development notes
+### Regular expression used to create `strong` element
 
 ```javascript
 const str = "This is ***** of the part and **at 7:00AM**, we go **there**.";
