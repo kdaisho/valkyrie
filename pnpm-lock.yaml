@@ -11,6 +11,9 @@ dependencies:
   inquirer:
     specifier: ^9.2.12
     version: 9.2.12
+  valkyrie:
+    specifier: link:valkyrie
+    version: link:valkyrie
 
 devDependencies:
   '@types/inquirer':

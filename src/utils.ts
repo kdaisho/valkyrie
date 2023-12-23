@@ -48,3 +48,13 @@ export function getLeafNodes(rootNode) {
 
     return traverse([], rootNode)
 }
+
+export function populateChildren(node: any) {
+    if (!node.children) return node
+
+    return node.children.map((c: any) => {
+        if (c.type === 'Text') {
+            return `<li>${c.value}</li>`
+        }
+    })
+}

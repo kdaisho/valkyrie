@@ -1,3 +1,5 @@
+import { populateChildren } from './utils'
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const heading: Record<number, string> = {
     1: 'h1',
@@ -73,13 +75,17 @@ function generate(lexicalBlocks: LexicalBlocks) {
                 (tag === 'ol' ? ` start=${lexicalBlock.value}` : '') +
                 '>'
 
+            populateChildren(lexicalBlock)
+
             const content = lexicalBlock.children
                 .map(child => {
                     if (child.type === 'Text') {
                         return '<li>' + child.value + '</li>'
                     }
 
-                    return generate([child])
+                    const generated = generate(child.children)
+
+                    return generated
                 })
                 .join('')
             const closingTag = '</' + tag + '>'

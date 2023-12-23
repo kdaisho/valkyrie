@@ -16,28 +16,10 @@ export default function (input: string) {
     const lexicalBlocks = []
 
     while (chars.length) {
-        // if (depth >= 2) {
-        //     tokens.push({
-        //         type: 'Indentation',
-        //         value: depth,
-        //     })
-        //     depth = 0
-
-        //     continue
-        // }
-
         if (isLineBreak(chars[0])) {
             pop(chars)
 
             depth = 0
-
-            // if (depth >= 2) {
-            //     tokens.push({
-            //         type: 'Indentation',
-            //         value: depth,
-            //     })
-            //     depth = 0
-            // }
 
             if (tokens.length) {
                 lexicalBlocks.push(tokens)
@@ -72,11 +54,13 @@ export default function (input: string) {
             tokens.push({
                 type: 'Heading',
                 value: symbol,
+                depth,
             })
 
             tokens.push({
                 type: 'Text',
                 value: value.trim(),
+                depth,
             })
 
             continue
@@ -120,6 +104,7 @@ export default function (input: string) {
                 tokens.push({
                     type: 'Number',
                     value: symbol,
+                    depth,
                 })
             } else {
                 value += symbol
@@ -133,6 +118,7 @@ export default function (input: string) {
             tokens.push({
                 type: 'Text',
                 value,
+                depth,
             })
 
             continue
@@ -150,7 +136,7 @@ export default function (input: string) {
             tokens.push({
                 type: 'Text',
                 value,
-                // depth,
+                depth,
             })
 
             continue
