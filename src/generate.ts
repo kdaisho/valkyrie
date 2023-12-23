@@ -36,8 +36,13 @@ type Indentation = {
 
 type LexicalBlocks = (Heading | Text | List | Indentation)[]
 
+let rootDepth = 0
+let currentDepth = 0
 let counter = 0
 let html = ''
+
+const ref: List[] = []
+let cursor = -1
 
 function generate(lexicalBlocks: LexicalBlocks) {
     counter++
@@ -78,6 +83,9 @@ function generate(lexicalBlocks: LexicalBlocks) {
         }
 
         if (lexicalBlocks[0].type === 'List') {
+            ref.push(lexicalBlocks[0])
+            cursor++
+
             const tag = lexicalBlocks[0].value === '-' ? 'ul' : 'ol'
             const openingTag =
                 '<' +
@@ -87,7 +95,7 @@ function generate(lexicalBlocks: LexicalBlocks) {
 
             html += openingTag
 
-            let content = lexicalBlocks[0].children
+            const content = lexicalBlocks[0].children
                 .map(child => {
                     if (child.type === 'Text') {
                         return '<li>' + child.value + '</li>'
@@ -99,17 +107,52 @@ function generate(lexicalBlocks: LexicalBlocks) {
 
             html += content
 
-            if (
-                lexicalBlocks[1]?.type === 'List' &&
-                lexicalBlocks[0]?.depth < lexicalBlocks[1]?.depth
-            ) {
+            // if (
+            //     lexicalBlocks[1]?.type === 'List' &&
+            //     ref[cursor].depth < lexicalBlocks[1]?.depth
+            // ) {
+            //     lexicalBlocks.shift()
+
+            //     generate(lexicalBlocks)
+            // } else {
+            //     cursor--
+            //     html += '</' + tag + '>'
+            //     lexicalBlocks.shift()
+            //     continue
+            // }
+
+            while (lexicalBlocks[1]?.type === 'List') {
+                const cal = ref[cursor]?.depth - lexicalBlocks[1]?.depth
+                console.log('==> REF', { ref, cursor, cal })
                 lexicalBlocks.shift()
-                generate(lexicalBlocks)
+                if (cal < 0) {
+                    generate(lexicalBlocks)
+                    continue
+                }
+                if (cal === 0) {
+                    generate(lexicalBlocks)
+                    continue
+                }
+                if (cal > 0) {
+                    // 2
+                    for (let i = cal; i >= 0; i -= 2) {
+                        console.count('==>')
+                        html += '</' + tag + '>'
+                        if (ref[--cursor]?.depth === lexicalBlocks[1]?.depth) {
+                            break
+                        }
+                    }
+                    console.log('==> ME', cal, lexicalBlocks)
+                    console.log('==> HERE?', { ref, cursor })
+                    generate(lexicalBlocks)
+                    cursor--
+                }
+                // lexicalBlocks.shift()
+                // generate(lexicalBlocks)
+                // cursor--
+                html += '</' + tag + '>'
             }
-
-            console.log('==> CONTENT', content)
-
-            html += '</' + tag + '>'
+            // console.log('==> CLOSING', tag)
 
             lexicalBlocks.shift()
             continue
