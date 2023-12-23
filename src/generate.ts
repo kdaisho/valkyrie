@@ -101,7 +101,7 @@ function generate(lexicalBlocks: LexicalBlocks) {
                     console.log('==> Case 1')
 
                     generate(lexicalBlocks)
-                    html += '</' + tag + ' wow>'
+                    // html += '</' + tag + ' wow1>'
                     continue
                 }
                 if (cal === 0) {
@@ -109,6 +109,7 @@ function generate(lexicalBlocks: LexicalBlocks) {
 
                     html +=
                         '<li>' + lexicalBlocks[0].children[0].value + '</li>'
+                    // html += '</' + tag + ' wow2>'
                     continue
                 }
                 if (cal > 0) {
@@ -116,22 +117,26 @@ function generate(lexicalBlocks: LexicalBlocks) {
 
                     for (let i = cal; i >= 0; i -= 2) {
                         console.log('I', i)
-                        html += '</' + tag + ' wow>'
+
+                        html += '</' + tag + ' wow3>'
                         if (ref[--cursor]?.depth === lexicalBlocks[1]?.depth) {
                             break
+                            // continue
                         }
                     }
 
                     generate(lexicalBlocks)
+                    // html += '</' + tag + ' wow3>'
                     cursor--
                     continue
                 }
 
-                html += '</' + tag + ' meow>'
+                // html += '</' + tag + ' xxxxx>'
+                // if (cal > 0 || cal < 0 || cal === 0) {
+                // }
             }
 
-            html += '</' + tag + ' peow>'
-
+            html += '</' + tag + ' last>'
             lexicalBlocks.shift()
             continue
         }
