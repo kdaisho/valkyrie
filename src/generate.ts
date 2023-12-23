@@ -107,29 +107,16 @@ function generate(lexicalBlocks: LexicalBlocks) {
 
             html += content
 
-            // if (
-            //     lexicalBlocks[1]?.type === 'List' &&
-            //     ref[cursor].depth < lexicalBlocks[1]?.depth
-            // ) {
-            //     lexicalBlocks.shift()
-
-            //     generate(lexicalBlocks)
-            // } else {
-            //     cursor--
-            //     html += '</' + tag + '>'
-            //     lexicalBlocks.shift()
-            //     continue
-            // }
-
             while (lexicalBlocks[1]?.type === 'List') {
                 const cal = ref[cursor]?.depth - lexicalBlocks[1]?.depth
                 console.log('==> REF', { ref, cursor, cal, lexicalBlocks })
                 lexicalBlocks.shift()
+
                 if (cal < 0) {
                     console.log('==> ALL CASE?', lexicalBlocks)
                     generate(lexicalBlocks)
                     html += '</' + tag + '>'
-                    // continue
+                    continue
                 }
                 if (cal === 0) {
                     console.log('==> WOW', lexicalBlocks[0])
@@ -137,12 +124,12 @@ function generate(lexicalBlocks: LexicalBlocks) {
                         '<li>' + lexicalBlocks[0].children[0].value + '</li>'
                     html += '</' + tag + '>'
                     // generate(lexicalBlocks)
-                    // continue
+                    continue
                 }
                 if (cal > 0) {
                     // 2
                     for (let i = cal; i >= 0; i -= 2) {
-                        console.count('==>')
+                        console.log('I', i)
                         html += '</' + tag + '>'
                         if (ref[--cursor]?.depth === lexicalBlocks[1]?.depth) {
                             break
@@ -152,12 +139,14 @@ function generate(lexicalBlocks: LexicalBlocks) {
                     console.log('==> HERE?', { ref, cursor })
                     generate(lexicalBlocks)
                     cursor--
+                    continue
                 }
                 // lexicalBlocks.shift()
                 // generate(lexicalBlocks)
                 // cursor--
                 html += '</' + tag + '>'
             }
+            // html += '</' + tag + '>'
             // console.log('==> CLOSING', tag)
 
             lexicalBlocks.shift()
