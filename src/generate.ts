@@ -36,25 +36,12 @@ type Indentation = {
 
 type LexicalBlocks = (Heading | Text | List | Indentation)[]
 
-let rootDepth = 0
-let currentDepth = 0
-let counter = 0
 let html = ''
 
 const ref: List[] = []
 let cursor = -1
 
 function generate(lexicalBlocks: LexicalBlocks) {
-    counter++
-    console.log('==> INIT1', lexicalBlocks.length, lexicalBlocks)
-    console.log('==> INIT2', { html })
-
-    if (counter >= 12) {
-        console.log('==>', '======================== DONE1')
-        console.log('==>', '======================== DONE2', { html })
-        return html
-    }
-
     while (lexicalBlocks.length) {
         if (lexicalBlocks[0].type === 'Heading') {
             const lexicalBlock = lexicalBlocks[0] as Heading
@@ -103,31 +90,30 @@ function generate(lexicalBlocks: LexicalBlocks) {
                 })
                 .join('')
 
-            console.log('==> CONTENT ONE', content)
-
             html += content
 
             while (lexicalBlocks[1]?.type === 'List') {
                 const cal = ref[cursor]?.depth - lexicalBlocks[1]?.depth
-                console.log('==> REF', { ref, cursor, cal, lexicalBlocks })
+
                 lexicalBlocks.shift()
 
                 if (cal < 0) {
                     console.log('==> Case 1')
+
                     generate(lexicalBlocks)
                     html += '</' + tag + ' wow>'
                     continue
                 }
                 if (cal === 0) {
                     console.log('==> Case 2')
+
                     html +=
                         '<li>' + lexicalBlocks[0].children[0].value + '</li>'
-                    // html += '</' + tag + ' wow>'
                     continue
                 }
                 if (cal > 0) {
                     console.log('==> Case 3')
-                    // 2
+
                     for (let i = cal; i >= 0; i -= 2) {
                         console.log('I', i)
                         html += '</' + tag + ' wow>'
@@ -140,11 +126,8 @@ function generate(lexicalBlocks: LexicalBlocks) {
                     cursor--
                     continue
                 }
-                // lexicalBlocks.shift()
-                // generate(lexicalBlocks)
-                // cursor--
+
                 html += '</' + tag + ' meow>'
-                // continue
             }
 
             html += '</' + tag + ' peow>'
