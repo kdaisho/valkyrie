@@ -58,8 +58,7 @@ function parse(lexicalBlocks: (LexicalBlock | List)[][]) {
         counter++
     }
 
-    // console.log('AST:', JSON.stringify(ast, null, 2))
-    console.log('AST:', ast)
+    // console.log('AST:', ast)
 
     return ast
 }

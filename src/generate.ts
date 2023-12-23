@@ -41,7 +41,11 @@ let html = ''
 const ref: List[] = []
 let cursor = -1
 
+let tag = ''
+let _c = 0
+
 function generate(lexicalBlocks: LexicalBlocks) {
+    console.log('==> INIT', lexicalBlocks)
     while (lexicalBlocks.length) {
         if (lexicalBlocks[0].type === 'Heading') {
             const lexicalBlock = lexicalBlocks[0] as Heading
@@ -70,10 +74,11 @@ function generate(lexicalBlocks: LexicalBlocks) {
         }
 
         if (lexicalBlocks[0].type === 'List') {
+            console.log('==>', 'LIST LOOP')
             ref.push(lexicalBlocks[0])
             cursor++
 
-            const tag = lexicalBlocks[0].value === '-' ? 'ul' : 'ol'
+            tag = lexicalBlocks[0].value === '-' ? 'ul' : 'ol'
             const openingTag =
                 '<' +
                 tag +
@@ -92,27 +97,40 @@ function generate(lexicalBlocks: LexicalBlocks) {
 
             html += content
 
+            console.log('==> MORE?', lexicalBlocks[1])
+
             while (lexicalBlocks[1]?.type === 'List') {
                 const cal = ref[cursor]?.depth - lexicalBlocks[1]?.depth
+
+                console.log('==> CAL', cal)
 
                 lexicalBlocks.shift()
 
                 if (cal < 0) {
+                    _c = 1
                     console.log('==> Case 1')
 
-                    generate(lexicalBlocks)
-                    // html += '</' + tag + ' wow1>'
+                    const yo = generate(lexicalBlocks)
+                    console.log('==> YO', yo) // good
+
+                    html = yo
+                    html += '</' + tag + ' wow1>'
+                    return html
                     continue
                 }
                 if (cal === 0) {
+                    _c = 2
                     console.log('==> Case 2')
 
                     html +=
                         '<li>' + lexicalBlocks[0].children[0].value + '</li>'
-                    // html += '</' + tag + ' wow2>'
+
+                    html += '</' + tag + ' wow22>'
+                    return html
                     continue
                 }
                 if (cal > 0) {
+                    _c = 3
                     console.log('==> Case 3')
 
                     for (let i = cal; i >= 0; i -= 2) {
@@ -121,24 +139,39 @@ function generate(lexicalBlocks: LexicalBlocks) {
                         html += '</' + tag + ' wow3>'
                         if (ref[--cursor]?.depth === lexicalBlocks[1]?.depth) {
                             break
-                            // continue
                         }
                     }
 
-                    generate(lexicalBlocks)
-                    // html += '</' + tag + ' wow3>'
+                    const yo2 = generate(lexicalBlocks)
+                    console.log('==> YO2', yo2)
+
+                    // html += '</' + tag + ' wow3.5>'
+                    html = yo2
+                    return html
+
                     cursor--
                     continue
                 }
 
-                // html += '</' + tag + ' xxxxx>'
-                // if (cal > 0 || cal < 0 || cal === 0) {
-                // }
+                html += '</' + tag + ' xxxx>'
             }
 
-            html += '</' + tag + ' last>'
-            lexicalBlocks.shift()
-            continue
+            console.log('==> _c??', _c)
+
+            if (_c === 1) {
+                html += '</' + tag + ' zzzz>'
+            }
+
+            return html
+
+            console.log('==> CASE?', _c)
+            console.count('WHAT')
+
+            // if (_c === 2 || _c === 1) {
+            //     html += '</' + tag + ' zzzz>'
+            // }
+            // lexicalBlocks.shift()
+            // continue
         }
 
         lexicalBlocks.shift()
