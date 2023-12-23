@@ -123,15 +123,21 @@ function generate(lexicalBlocks: LexicalBlocks) {
 
             while (lexicalBlocks[1]?.type === 'List') {
                 const cal = ref[cursor]?.depth - lexicalBlocks[1]?.depth
-                console.log('==> REF', { ref, cursor, cal })
+                console.log('==> REF', { ref, cursor, cal, lexicalBlocks })
                 lexicalBlocks.shift()
                 if (cal < 0) {
+                    console.log('==> ALL CASE?', lexicalBlocks)
                     generate(lexicalBlocks)
-                    continue
+                    html += '</' + tag + '>'
+                    // continue
                 }
                 if (cal === 0) {
-                    generate(lexicalBlocks)
-                    continue
+                    console.log('==> WOW', lexicalBlocks[0])
+                    html +=
+                        '<li>' + lexicalBlocks[0].children[0].value + '</li>'
+                    html += '</' + tag + '>'
+                    // generate(lexicalBlocks)
+                    // continue
                 }
                 if (cal > 0) {
                     // 2
