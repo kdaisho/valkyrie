@@ -24,7 +24,11 @@ export const getLeafNode = (node: {
             console.log('==> CCCC', ch)
             if (ch.type === 'List') {
                 getLeafNode(ch)
-                node = children[0]
+                node = ch
+            } else {
+                console.log('==>', '======================== DONE', ch)
+                getLeafNode(ch)
+                node = ch
             }
         })
     }

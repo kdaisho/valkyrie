@@ -19,8 +19,6 @@ function parse(lexicalBlocks: (LexicalBlock | List)[][]) {
     let counter = 0
     const ast: (LexicalBlock | List)[] = []
 
-    console.log('==> INIT', counter, lexicalBlocks)
-
     while (counter < lexicalBlocks.length) {
         const [first, ...rest] = lexicalBlocks[counter]
         const element: any = {}
@@ -37,16 +35,6 @@ function parse(lexicalBlocks: (LexicalBlock | List)[][]) {
             element.value = first.value
             element.depth = first.depth
             element.children = rest
-
-            // console.log('==> NEXT', lexicalBlocks[counter + 1])
-
-            // if (lexicalBlocks[counter + 1]?.[0]?.type === 'List') {
-            //     const nextListLexicalBlock = lexicalBlocks[counter + 1]
-            //     if (element.depth < nextListLexicalBlock[0].depth) {
-            //         parse([nextListLexicalBlock])
-            //         counter++
-            //     }
-            // }
         }
 
         if (first.type === 'Text') {

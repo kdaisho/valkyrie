@@ -24,6 +24,7 @@ type Text = {
 type List = {
     type: 'List'
     value: string
+    depth: number
     children: LexicalBlocks
 }
 
@@ -35,13 +36,23 @@ type Indentation = {
 
 type LexicalBlocks = (Heading | Text | List | Indentation)[]
 
-function generate(lexicalBlocks: LexicalBlocks) {
-    let counter = 0
-    let html = ''
+let counter = 0
+let html = ''
 
-    while (counter < lexicalBlocks.length) {
-        if (lexicalBlocks[counter].type === 'Heading') {
-            const lexicalBlock = lexicalBlocks[counter] as Heading
+function generate(lexicalBlocks: LexicalBlocks) {
+    counter++
+    console.log('==> INIT1', lexicalBlocks.length, lexicalBlocks)
+    console.log('==> INIT2', { html })
+
+    if (counter >= 12) {
+        console.log('==>', '======================== DONE1')
+        console.log('==>', '======================== DONE2', { html })
+        return html
+    }
+
+    while (lexicalBlocks.length) {
+        if (lexicalBlocks[0].type === 'Heading') {
+            const lexicalBlock = lexicalBlocks[0] as Heading
             const openingTag = '<' + heading[lexicalBlock.value.length] + '>'
             const content = lexicalBlock.children.map(child => {
                 if (child.type === 'Text') {
@@ -50,49 +61,61 @@ function generate(lexicalBlocks: LexicalBlocks) {
             })
             const closingTag = '</' + heading[lexicalBlock.value.length] + '>'
             html += openingTag + content + closingTag
-            counter++
+            lexicalBlocks.shift()
             continue
         }
 
-        if (lexicalBlocks[counter].type === 'Text') {
+        if (lexicalBlocks[0].type === 'Text') {
             const openingTag = '<p>'
-            const content = (lexicalBlocks[counter] as Text).value.replace(
+            const content = (lexicalBlocks[0] as Text).value.replace(
                 /(\*\*|__)(?=\S)([^*_]+?)(?<=\S)\1/g,
                 '<strong>$2</strong>'
             )
             const closingTag = '</p>'
             html += openingTag + content + closingTag
-            counter++
+            lexicalBlocks.shift()
             continue
         }
 
-        if (lexicalBlocks[counter].type === 'List') {
-            const lexicalBlock = lexicalBlocks[counter] as List
-            const tag = lexicalBlock.value === '-' ? 'ul' : 'ol'
+        if (lexicalBlocks[0].type === 'List') {
+            const tag = lexicalBlocks[0].value === '-' ? 'ul' : 'ol'
             const openingTag =
                 '<' +
                 tag +
-                (tag === 'ol' ? ` start=${lexicalBlock.value}` : '') +
+                (tag === 'ol' ? ` start=${lexicalBlocks[0].value}` : '') +
                 '>'
 
-            populateChildren(lexicalBlock)
+            html += openingTag
 
-            const content = lexicalBlock.children
+            let content = lexicalBlocks[0].children
                 .map(child => {
                     if (child.type === 'Text') {
                         return '<li>' + child.value + '</li>'
                     }
-
-                    const generated = generate(child.children)
-
-                    return generated
                 })
                 .join('')
-            const closingTag = '</' + tag + '>'
-            html += openingTag + content + closingTag
-            counter++
+
+            console.log('==> CONTENT ONE', content)
+
+            html += content
+
+            if (
+                lexicalBlocks[1]?.type === 'List' &&
+                lexicalBlocks[0]?.depth < lexicalBlocks[1]?.depth
+            ) {
+                lexicalBlocks.shift()
+                generate(lexicalBlocks)
+            }
+
+            console.log('==> CONTENT', content)
+
+            html += '</' + tag + '>'
+
+            lexicalBlocks.shift()
             continue
         }
+
+        lexicalBlocks.shift()
     }
 
     return html

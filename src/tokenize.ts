@@ -150,7 +150,7 @@ export default function (input: string) {
         tokens = []
     }
 
-    console.log('==> LEXICAL BLOCKS', lexicalBlocks)
+    // console.log('==> LEXICAL BLOCKS', lexicalBlocks)
 
     return lexicalBlocks
 }
