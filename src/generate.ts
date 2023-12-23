@@ -113,30 +113,29 @@ function generate(lexicalBlocks: LexicalBlocks) {
                 lexicalBlocks.shift()
 
                 if (cal < 0) {
-                    console.log('==> ALL CASE?', lexicalBlocks)
+                    console.log('==> Case 1')
                     generate(lexicalBlocks)
-                    html += '</' + tag + '>'
+                    html += '</' + tag + ' wow>'
                     continue
                 }
                 if (cal === 0) {
-                    console.log('==> WOW', lexicalBlocks[0])
+                    console.log('==> Case 2')
                     html +=
                         '<li>' + lexicalBlocks[0].children[0].value + '</li>'
-                    html += '</' + tag + '>'
-                    // generate(lexicalBlocks)
+                    // html += '</' + tag + ' wow>'
                     continue
                 }
                 if (cal > 0) {
+                    console.log('==> Case 3')
                     // 2
                     for (let i = cal; i >= 0; i -= 2) {
                         console.log('I', i)
-                        html += '</' + tag + '>'
+                        html += '</' + tag + ' wow>'
                         if (ref[--cursor]?.depth === lexicalBlocks[1]?.depth) {
                             break
                         }
                     }
-                    console.log('==> ME', cal, lexicalBlocks)
-                    console.log('==> HERE?', { ref, cursor })
+
                     generate(lexicalBlocks)
                     cursor--
                     continue
@@ -144,10 +143,11 @@ function generate(lexicalBlocks: LexicalBlocks) {
                 // lexicalBlocks.shift()
                 // generate(lexicalBlocks)
                 // cursor--
-                html += '</' + tag + '>'
+                html += '</' + tag + ' meow>'
+                // continue
             }
-            // html += '</' + tag + '>'
-            // console.log('==> CLOSING', tag)
+
+            html += '</' + tag + ' peow>'
 
             lexicalBlocks.shift()
             continue
