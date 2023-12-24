@@ -13,7 +13,7 @@ const heading: Record<number, string> = {
 type Heading = {
     type: 'Heading'
     value: string
-    children: LexicalBlocks
+    children: AST
 }
 
 type Text = {
@@ -25,115 +25,50 @@ type List = {
     type: 'List'
     value: string
     depth: number
-    children: LexicalBlocks
+    children: AST
 }
 
 type Indentation = {
     type: 'Indentation'
     value: number
-    children: LexicalBlocks
+    children: AST
 }
 
-type LexicalBlocks = (Heading | Text | List | Indentation)[]
+type AST = (Heading | Text | List | Indentation)[]
 
 let html = ''
 
-const ref: List[] = []
-let cursor = -1
+function generate(ast: AST) {
+    console.log('==> INIT', ast)
 
-let tag = ''
-let _c = 0
+    while (ast.length) {
+        if (ast[0].type === 'Heading') {
+            const { value, children } = ast[0]
+            const openingTag = '<' + heading[value.length] + '>'
+            const text = children[0].value
+            const closingTag = '</' + heading[value.length] + '>'
+            html += openingTag + text + closingTag
+            ast.shift()
 
-function generate(lexicalBlocks: LexicalBlocks) {
-    console.log('==> INIT GENERATE', lexicalBlocks)
-    // while (lexicalBlocks.length) {
-    //     if (lexicalBlocks[0].type === 'Heading') {
-    //         const lexicalBlock = lexicalBlocks[0] as Heading
-    //         const openingTag = '<' + heading[lexicalBlock.value.length] + '>'
-    //         const content = lexicalBlock.children.map(child => {
-    //             if (child.type === 'Text') {
-    //                 return child.value
-    //             }
-    //         })
-    //         const closingTag = '</' + heading[lexicalBlock.value.length] + '>'
-    //         html += openingTag + content + closingTag
-    //         lexicalBlocks.shift()
-    //         continue
-    //     }
+            continue
+        }
 
-    //     if (lexicalBlocks[0].type === 'Text') {
-    //         const openingTag = '<p>'
-    //         const content = (lexicalBlocks[0] as Text).value.replace(
-    //             /(\*\*|__)(?=\S)([^*_]+?)(?<=\S)\1/g,
-    //             '<strong>$2</strong>'
-    //         )
-    //         const closingTag = '</p>'
-    //         html += openingTag + content + closingTag
-    //         lexicalBlocks.shift()
-    //         continue
-    //     }
+        if (ast[0].type === 'Text') {
+            const { value } = ast[0]
+            const content = value.replace(
+                /(\*\*|__)(?=\S)([^*_]+?)(?<=\S)\1/g,
+                '<strong>$2</strong>'
+            )
+            html += '<p>' + content + '</p>'
+            ast.shift()
 
-    //     if (lexicalBlocks[0].type === 'List') {
-    //         cursor++
+            continue
+        }
 
-    //         tag = lexicalBlocks[0].value === '-' ? 'ul' : 'ol'
-    //         const openingTag =
-    //             '<' +
-    //             tag +
-    //             (tag === 'ol' ? ` start=${lexicalBlocks[0].value}` : '') +
-    //             '>'
+        ast.shift()
+    }
 
-    //         html += openingTag
-
-    //         const content = lexicalBlocks[0].children
-    //             .map(child => {
-    //                 if (child.type === 'Text') {
-    //                     return '<li>' + child.value + '</li>'
-    //                 }
-    //             })
-    //             .join('')
-
-    //         html += content
-
-    //         if (lexicalBlocks[1]?.type === 'List') {
-    //             console.log('==> NEXT IS LIST', lexicalBlocks[1], html)
-    //             let gap = lexicalBlocks[1]?.depth - lexicalBlocks[0]?.depth
-
-    //             lexicalBlocks.shift()
-
-    //             if (gap >= 1) {
-    //                 console.log('==> case 1')
-    //                 generate(lexicalBlocks)
-    //             } else if (gap <= -1) {
-    //                 console.log('==> case 2')
-    //                 html += '</' + tag + ' wow2>'
-    //                 while (gap < 0) {
-    //                     html += '</' + tag + ` wow_${gap}>`
-    //                     gap++
-    //                 }
-    //                 // html += '</' + tag + '>'
-
-    //                 continue
-    //             } else {
-    //                 console.log('==> case 3')
-    //                 html +=
-    //                     '<li>' + lexicalBlocks[1].children[0].value + '</li>'
-
-    //                 console.log('==> case 3.5', html)
-
-    //                 lexicalBlocks.shift()
-    //                 html += '</' + tag + '>'
-    //                 continue
-    //                 // generate(lexicalBlocks)
-    //             }
-    //         } else {
-    //             console.log('==> NEXT IS NOT LIST', lexicalBlocks[1], html)
-    //         }
-    //         html += '</' + tag + ' zzz>'
-    //     }
-
-    //     lexicalBlocks.shift()
-    // }
+    console.log('==> HTML', html)
 
     return html
 }

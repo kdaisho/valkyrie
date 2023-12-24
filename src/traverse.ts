@@ -9,7 +9,7 @@ type Node = {
 
 export default function traverse(ast: Node[]) {
     const result: Node[] = []
-    const listStack: (Node & { depth: number })[] = []
+    const listStack: Node[] = []
 
     ast.forEach(item => {
         if (item.type === 'List') {
