@@ -1,16 +1,17 @@
 export type Heading = {
-    type: string
+    type: 'Heading'
     value: string
     children: Text[]
 }
 
 export type Text = {
-    type: string
+    type: 'Text'
     value: string
 }
 
 export type List = {
     type: 'List'
+    value: string
     depth: number
     children: (Text | List)[]
 }

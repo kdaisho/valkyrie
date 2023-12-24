@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { buildListHtml, populateChildren } from './utils'
+import { buildListHtml, getTextBody } from './utils'
 
 const heading: Record<number, string> = {
     1: 'h1',
@@ -13,7 +12,7 @@ const heading: Record<number, string> = {
 type Heading = {
     type: 'Heading'
     value: string
-    children: AST
+    children: Text[]
 }
 
 type Text = {
@@ -25,7 +24,7 @@ type List = {
     type: 'List'
     value: string
     depth: number
-    children: AST
+    children: (List | Text)[]
 }
 
 type Indentation = {
@@ -36,10 +35,8 @@ type Indentation = {
 
 type AST = (Heading | Text | List | Indentation)[]
 
-let html = ''
-
 function generate(ast: AST) {
-    console.log('==> INIT', JSON.stringify(ast, null, 2))
+    let html = ''
 
     while (ast.length) {
         if (ast[0].type === 'Heading') {
@@ -55,29 +52,31 @@ function generate(ast: AST) {
 
         if (ast[0].type === 'Text') {
             const { value } = ast[0]
-            const content = value.replace(
-                /(\*\*|__)(?=\S)([^*_]+?)(?<=\S)\1/g,
-                '<strong>$2</strong>'
-            )
-            html += '<p>' + content + '</p>'
+            html += '<p>' + getTextBody(value) + '</p>'
             ast.shift()
 
             continue
         }
 
-        // if (ast[0].type === 'List') {
-        //     const { children } = ast[0] as { children: List[] }
-        //     const content = buildListHtml(children)
-        //     html += '<ul>' + content + '</ul>'
-        //     ast.shift()
+        if (ast[0].type === 'List') {
+            const { value, children } = ast[0]
+            const content = buildListHtml(children)
+            const tagName = value === '-' ? 'ul' : 'ol'
+            const openingTag =
+                '<' +
+                tagName +
+                (tagName === 'ol' ? ` start=${value}` : '') +
+                '>'
+            const closingTag = '</' + tagName + '>'
 
-        //     continue
-        // }
+            html += openingTag + content + closingTag
+            ast.shift()
+
+            continue
+        }
 
         ast.shift()
     }
-
-    // console.log('==> HTML', html)
 
     return html
 }

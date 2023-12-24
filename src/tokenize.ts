@@ -100,7 +100,7 @@ export default function (input: string) {
 
             if (isList) {
                 tokens.push({
-                    type: 'Number',
+                    type: 'List',
                     value: symbol,
                 })
             } else {
@@ -114,7 +114,7 @@ export default function (input: string) {
 
             tokens.push({
                 type: 'Text',
-                value,
+                value: value.trim(),
             })
 
             continue
@@ -144,8 +144,6 @@ export default function (input: string) {
         lexicalBlocks.push(tokens)
         tokens = []
     }
-
-    // console.log('==> LEXICAL BLOCKS', lexicalBlocks)
 
     return lexicalBlocks
 }
