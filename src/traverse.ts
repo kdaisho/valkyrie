@@ -26,30 +26,26 @@ export default function traverse(ast: (LexicalBlock | List)[]) {
                     listStack.length > 0 &&
                     listStack[listStack.length - 1].depth >= item.depth
                 ) {
-                    console.log('==>', 101)
+                    console.log('==>', 101, item)
+                    console.log('==>', 102, listStack)
                     listStack.pop()
                 }
 
                 if (listStack.length === 0) {
-                    // New top-level list
+                    console.log('==>', 103, item)
                     result.push(item)
-                    console.log('==>', 102)
                 } else {
-                    console.log('==>', 103)
-                    // Nest within the last list item
+                    console.log('==>', 104, item)
                     const parent = listStack[listStack.length - 1]
-                    if (!parent.children) {
-                        console.log('==>', 104)
-                        parent.children = []
-                    }
-                    console.log('==>', 105)
+                    console.log('==>', 105, parent)
+
                     parent.children.push(item)
                 }
-                console.log('==>', 106)
+                console.log('==>', 106, item)
 
                 listStack.push(item)
             } else {
-                console.log('==>', 107)
+                console.log('==>', 200, item)
                 result.push(item)
             }
         })
