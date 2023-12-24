@@ -39,7 +39,7 @@ type AST = (Heading | Text | List | Indentation)[]
 let html = ''
 
 function generate(ast: AST) {
-    console.log('==> INIT', ast)
+    console.log('==> INIT', JSON.stringify(ast, null, 2))
 
     while (ast.length) {
         if (ast[0].type === 'Heading') {
