@@ -1,30 +1,63 @@
 import { getLeafNode } from './utils'
 
-export default function traverse(ast: any[]) {
-    const hierarchicalAst = []
-    let last
+type LexicalBlock = {
+    type: string
+    value: string
+    depth: number
+    children?: LexicalBlock[]
+}
 
-    while (ast.length) {
-        last = ast.shift()
-        hierarchicalAst.push(last)
+type List = {
+    type: 'List'
+    value: string
+    depth: number
+    children?: (LexicalBlock | List)[]
+}
 
-        console.log('==> HI_HIER', hierarchicalAst)
-        console.log('==> HI_AST', ast)
-        console.log('==> HI_DEPTH', hierarchicalAst.at(-1).depth < ast[0].depth)
-        while (
-            last.type === 'List' &&
-            ast[0]?.type === 'List' &&
-            last.depth < ast[0].depth
-        ) {
-            console.log('==> PUSHING THIS', ast[0])
-            last = ast.shift()
-            console.log('==> TO', hierarchicalAst.at(-1))
-            const leaf = getLeafNode(hierarchicalAst.at(-1))
-            console.log('==> LEAF', leaf)
+export default function traverse(ast: (LexicalBlock | List)[]) {
+    function nestLists(arr) {
+        const result = []
+        const listStack = []
 
-            // continue
-        }
+        arr.forEach(item => {
+            if (item.type === 'List') {
+                console.log('==>', 100)
+                while (
+                    listStack.length > 0 &&
+                    listStack[listStack.length - 1].depth >= item.depth
+                ) {
+                    console.log('==>', 101)
+                    listStack.pop()
+                }
+
+                if (listStack.length === 0) {
+                    // New top-level list
+                    result.push(item)
+                    console.log('==>', 102)
+                } else {
+                    console.log('==>', 103)
+                    // Nest within the last list item
+                    const parent = listStack[listStack.length - 1]
+                    if (!parent.children) {
+                        console.log('==>', 104)
+                        parent.children = []
+                    }
+                    console.log('==>', 105)
+                    parent.children.push(item)
+                }
+                console.log('==>', 106)
+
+                listStack.push(item)
+            } else {
+                console.log('==>', 107)
+                result.push(item)
+            }
+        })
+
+        return result
     }
 
-    console.log('HAST:', hierarchicalAst)
+    // console.log('DONE2', JSON.stringify(nestLists(ast), null, 2))
+
+    return nestLists(ast)
 }

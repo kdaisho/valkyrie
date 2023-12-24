@@ -17,16 +17,12 @@ export const pop = (arr: string[]) => {
 export const getLeafNode = (node: {
     children?: Record<string, unknown>[]
 }): Record<string, unknown> => {
-    console.log('==> INIT', node)
     while (node.children?.length) {
-        console.log('==> NODD', node)
         node.children.forEach(ch => {
-            console.log('==> CCCC', ch)
             if (ch.type === 'List') {
                 getLeafNode(ch)
                 node = ch
             } else {
-                console.log('==>', '======================== DONE', ch)
                 getLeafNode(ch)
                 node = ch
             }

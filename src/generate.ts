@@ -45,95 +45,95 @@ let tag = ''
 let _c = 0
 
 function generate(lexicalBlocks: LexicalBlocks) {
-    console.log('==> INIT', lexicalBlocks)
-    while (lexicalBlocks.length) {
-        if (lexicalBlocks[0].type === 'Heading') {
-            const lexicalBlock = lexicalBlocks[0] as Heading
-            const openingTag = '<' + heading[lexicalBlock.value.length] + '>'
-            const content = lexicalBlock.children.map(child => {
-                if (child.type === 'Text') {
-                    return child.value
-                }
-            })
-            const closingTag = '</' + heading[lexicalBlock.value.length] + '>'
-            html += openingTag + content + closingTag
-            lexicalBlocks.shift()
-            continue
-        }
+    console.log('==> INIT GENERATE', lexicalBlocks)
+    // while (lexicalBlocks.length) {
+    //     if (lexicalBlocks[0].type === 'Heading') {
+    //         const lexicalBlock = lexicalBlocks[0] as Heading
+    //         const openingTag = '<' + heading[lexicalBlock.value.length] + '>'
+    //         const content = lexicalBlock.children.map(child => {
+    //             if (child.type === 'Text') {
+    //                 return child.value
+    //             }
+    //         })
+    //         const closingTag = '</' + heading[lexicalBlock.value.length] + '>'
+    //         html += openingTag + content + closingTag
+    //         lexicalBlocks.shift()
+    //         continue
+    //     }
 
-        if (lexicalBlocks[0].type === 'Text') {
-            const openingTag = '<p>'
-            const content = (lexicalBlocks[0] as Text).value.replace(
-                /(\*\*|__)(?=\S)([^*_]+?)(?<=\S)\1/g,
-                '<strong>$2</strong>'
-            )
-            const closingTag = '</p>'
-            html += openingTag + content + closingTag
-            lexicalBlocks.shift()
-            continue
-        }
+    //     if (lexicalBlocks[0].type === 'Text') {
+    //         const openingTag = '<p>'
+    //         const content = (lexicalBlocks[0] as Text).value.replace(
+    //             /(\*\*|__)(?=\S)([^*_]+?)(?<=\S)\1/g,
+    //             '<strong>$2</strong>'
+    //         )
+    //         const closingTag = '</p>'
+    //         html += openingTag + content + closingTag
+    //         lexicalBlocks.shift()
+    //         continue
+    //     }
 
-        if (lexicalBlocks[0].type === 'List') {
-            cursor++
+    //     if (lexicalBlocks[0].type === 'List') {
+    //         cursor++
 
-            tag = lexicalBlocks[0].value === '-' ? 'ul' : 'ol'
-            const openingTag =
-                '<' +
-                tag +
-                (tag === 'ol' ? ` start=${lexicalBlocks[0].value}` : '') +
-                '>'
+    //         tag = lexicalBlocks[0].value === '-' ? 'ul' : 'ol'
+    //         const openingTag =
+    //             '<' +
+    //             tag +
+    //             (tag === 'ol' ? ` start=${lexicalBlocks[0].value}` : '') +
+    //             '>'
 
-            html += openingTag
+    //         html += openingTag
 
-            const content = lexicalBlocks[0].children
-                .map(child => {
-                    if (child.type === 'Text') {
-                        return '<li>' + child.value + '</li>'
-                    }
-                })
-                .join('')
+    //         const content = lexicalBlocks[0].children
+    //             .map(child => {
+    //                 if (child.type === 'Text') {
+    //                     return '<li>' + child.value + '</li>'
+    //                 }
+    //             })
+    //             .join('')
 
-            html += content
+    //         html += content
 
-            if (lexicalBlocks[1]?.type === 'List') {
-                console.log('==> NEXT IS LIST', lexicalBlocks[1], html)
-                let gap = lexicalBlocks[1]?.depth - lexicalBlocks[0]?.depth
+    //         if (lexicalBlocks[1]?.type === 'List') {
+    //             console.log('==> NEXT IS LIST', lexicalBlocks[1], html)
+    //             let gap = lexicalBlocks[1]?.depth - lexicalBlocks[0]?.depth
 
-                if (gap >= 1) {
-                    console.log('==> case 1')
-                    lexicalBlocks.shift()
-                    generate(lexicalBlocks)
-                } else if (gap <= -1) {
-                    console.log('==> case 2')
-                    html += '</' + tag + ' wow2>'
-                    while (gap < 0) {
-                        html += '</' + tag + ` wow_${gap}>`
-                        gap++
-                    }
-                    // html += '</' + tag + '>'
-                    lexicalBlocks.shift()
-                    continue
-                } else {
-                    console.log('==> case 3')
-                    html +=
-                        '<li>' + lexicalBlocks[1].children[0].value + '</li>'
+    //             lexicalBlocks.shift()
 
-                    console.log('==> case 3.5', html)
+    //             if (gap >= 1) {
+    //                 console.log('==> case 1')
+    //                 generate(lexicalBlocks)
+    //             } else if (gap <= -1) {
+    //                 console.log('==> case 2')
+    //                 html += '</' + tag + ' wow2>'
+    //                 while (gap < 0) {
+    //                     html += '</' + tag + ` wow_${gap}>`
+    //                     gap++
+    //                 }
+    //                 // html += '</' + tag + '>'
 
-                    lexicalBlocks.shift()
-                    lexicalBlocks.shift()
-                    html += '</' + tag + '>'
-                    continue
-                    // generate(lexicalBlocks)
-                }
-            } else {
-                console.log('==> NEXT IS NOT LIST', lexicalBlocks[1], html)
-            }
-            html += '</' + tag + ' zzz>'
-        }
+    //                 continue
+    //             } else {
+    //                 console.log('==> case 3')
+    //                 html +=
+    //                     '<li>' + lexicalBlocks[1].children[0].value + '</li>'
 
-        lexicalBlocks.shift()
-    }
+    //                 console.log('==> case 3.5', html)
+
+    //                 lexicalBlocks.shift()
+    //                 html += '</' + tag + '>'
+    //                 continue
+    //                 // generate(lexicalBlocks)
+    //             }
+    //         } else {
+    //             console.log('==> NEXT IS NOT LIST', lexicalBlocks[1], html)
+    //         }
+    //         html += '</' + tag + ' zzz>'
+    //     }
+
+    //     lexicalBlocks.shift()
+    // }
 
     return html
 }
