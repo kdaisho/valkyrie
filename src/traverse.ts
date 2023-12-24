@@ -1,18 +1,14 @@
-type Node = {
-    type: string
-    value: string
-    children: Node[]
-} & {
-    type: 'List'
-    depth: number
-}
+import { Heading, Text, List } from './types'
+
+type Node = Heading | Text | List
 
 export default function traverse(ast: Node[]) {
     const result: Node[] = []
-    const listStack: Node[] = []
+    const listStack: List[] = []
 
-    ast.forEach(item => {
-        if (item.type === 'List') {
+    ast.forEach(_ => {
+        if (_.type === 'List') {
+            const item = _ as List
             while (listStack.at(-1) && listStack.at(-1)!.depth >= item.depth) {
                 listStack.pop()
             }
@@ -26,7 +22,7 @@ export default function traverse(ast: Node[]) {
 
             listStack.push(item)
         } else {
-            result.push(item)
+            result.push(_)
         }
     })
 

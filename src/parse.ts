@@ -1,22 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { getLeafNodes, peek } from './utils'
+import { Heading, Text, List } from './types'
 
-type LexicalBlock = {
-    type: string
-    value: string
-    children?: LexicalBlock[]
-}
-
-type List = {
-    type: 'List'
-    value: string
-    depth: number
-    children?: (LexicalBlock | List)[]
-}
-
-function parse(lexicalBlocks: (LexicalBlock | List)[][]) {
+function parse(lexicalBlocks: (Heading | Text | List)[][]) {
     let counter = 0
-    const ast: (LexicalBlock | List)[] = []
+    const ast: (Heading | Text | List)[] = []
 
     while (counter < lexicalBlocks.length) {
         const [first, ...rest] = lexicalBlocks[counter]
@@ -56,7 +42,7 @@ function parse(lexicalBlocks: (LexicalBlock | List)[][]) {
         counter++
     }
 
-    console.log('AST:', ast)
+    // console.log('AST:', ast)
 
     return ast
 }

@@ -1,6 +1,6 @@
-import { populateChildren } from './utils'
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { buildListHtml, populateChildren } from './utils'
+
 const heading: Record<number, string> = {
     1: 'h1',
     2: 'h2',
@@ -65,10 +65,19 @@ function generate(ast: AST) {
             continue
         }
 
+        // if (ast[0].type === 'List') {
+        //     const { children } = ast[0] as { children: List[] }
+        //     const content = buildListHtml(children)
+        //     html += '<ul>' + content + '</ul>'
+        //     ast.shift()
+
+        //     continue
+        // }
+
         ast.shift()
     }
 
-    console.log('==> HTML', html)
+    // console.log('==> HTML', html)
 
     return html
 }
