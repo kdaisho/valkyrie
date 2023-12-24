@@ -54,13 +54,11 @@ export default function (input: string) {
             tokens.push({
                 type: 'Heading',
                 value: symbol,
-                depth,
             })
 
             tokens.push({
                 type: 'Text',
                 value: value.trim(),
-                depth,
             })
 
             continue
@@ -104,7 +102,6 @@ export default function (input: string) {
                 tokens.push({
                     type: 'Number',
                     value: symbol,
-                    depth,
                 })
             } else {
                 value += symbol
@@ -118,7 +115,6 @@ export default function (input: string) {
             tokens.push({
                 type: 'Text',
                 value,
-                depth,
             })
 
             continue
@@ -136,7 +132,6 @@ export default function (input: string) {
             tokens.push({
                 type: 'Text',
                 value,
-                depth,
             })
 
             continue

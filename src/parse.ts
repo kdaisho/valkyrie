@@ -4,7 +4,6 @@ import { getLeafNodes, peek } from './utils'
 type LexicalBlock = {
     type: string
     value: string
-    depth: number
     children?: LexicalBlock[]
 }
 
@@ -25,7 +24,6 @@ function parse(lexicalBlocks: (LexicalBlock | List)[][]) {
 
         if (first.type === 'Heading') {
             element.type = 'Heading'
-            element.depth = 0
             element.value = first.value
             element.children = rest
         }
