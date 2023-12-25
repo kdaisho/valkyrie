@@ -3,57 +3,51 @@ import { Heading, Text, List, OrderedList, Whiteline } from './types'
 type Node = Heading | Text | List | OrderedList | Whiteline
 
 export default function traverse(ast: Node[]) {
-    const result: Node[] = []
-    const listStack: List[] = []
-    const orderedListStack: OrderedList[] = []
+    const output: Node[] = []
+    const liStack: List[] = []
+    const olStack: OrderedList[] = []
     const stack: Node[] = []
 
-    ast.forEach(_ => {
-        if (_.type === 'List') {
-            let item = _ as List | null
-            if (item === null) return
+    ast.forEach(node => {
+        if (node.type === 'List') {
+            let _node = node as List | null
+            if (_node === null) return
 
-            while (listStack[listStack.length - 1]?.depth > item.depth) {
-                listStack.pop()
+            while (liStack[liStack.length - 1]?.depth > _node.depth) {
+                liStack.pop()
             }
 
-            if (!listStack.length) {
-                result.push(item)
-            } else if (stack[stack.length - 1].type === 'List') {
-                const parent = listStack[listStack.length - 1]
+            if (stack[stack.length - 1]?.type === 'List') {
+                const parent = liStack[liStack.length - 1]
 
-                if (parent.depth === item.depth) {
-                    parent.children.push(...item.children)
-                    item = null
+                if (parent.depth === _node.depth) {
+                    parent.children.push(..._node.children)
+                    _node = null
                 } else {
-                    parent.children.push(item)
+                    parent.children.push(_node)
                 }
             } else {
-                result.push(item)
+                output.push(_node)
             }
 
-            if (item) {
-                listStack.push(item)
+            if (_node) {
+                liStack.push(_node)
             }
-        } else if (_.type === 'OrderedList') {
-            const item = _ as OrderedList
-
-            if (!orderedListStack.length) {
-                result.push(item)
-            } else if (stack[stack.length - 1].type === 'OrderedList') {
-                const parent = orderedListStack[orderedListStack.length - 1]
-                parent.children.push(...item.children)
+        } else if (node.type === 'OrderedList') {
+            if (stack[stack.length - 1]?.type === 'OrderedList') {
+                const parent = olStack[olStack.length - 1]
+                parent.children.push(...node.children)
             } else {
-                result.push(item)
+                output.push(node)
             }
 
-            orderedListStack.push(item)
+            olStack.push(node)
         } else {
-            result.push(_)
+            output.push(node)
         }
 
-        stack.push(_)
+        stack.push(node)
     })
 
-    return result
+    return output
 }
