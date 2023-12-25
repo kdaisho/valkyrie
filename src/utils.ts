@@ -15,6 +15,8 @@ export const pop = (arr: string[], count: number = 1) => {
 export const getTextBody = (value: string) => {
     return value
         .replace(/(\*\*|__)(?=\S)([^*_]+?)(?<=\S)\1/g, '<strong>$2</strong>')
+        .replace(/<!--.*?-->/g, '')
+        .replace(/\s{2,}/g, ' ')
         .trim()
 }
 
