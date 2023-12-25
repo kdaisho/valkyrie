@@ -1,3 +1,4 @@
+import { Heading, Text, List, OrderedList } from './types'
 import { buildListHtml, getTextBody } from './utils'
 
 const heading: Record<number, string> = {
@@ -9,31 +10,7 @@ const heading: Record<number, string> = {
     6: 'h6',
 }
 
-type Heading = {
-    type: 'Heading'
-    value: string
-    children: Text[]
-}
-
-type Text = {
-    type: 'Text'
-    value: string
-}
-
-type List = {
-    type: 'List'
-    value: string
-    depth: number
-    children: (List | Text)[]
-}
-
-type Indentation = {
-    type: 'Indentation'
-    value: number
-    children: AST
-}
-
-type AST = (Heading | Text | List | Indentation)[]
+type AST = (Heading | Text | List | OrderedList)[]
 
 function generate(ast: AST) {
     let html = ''
@@ -59,17 +36,17 @@ function generate(ast: AST) {
         }
 
         if (ast[0].type === 'List') {
-            const { value, children } = ast[0]
-            const content = buildListHtml(children)
-            const tagName = value === '-' ? 'ul' : 'ol'
-            const openingTag =
-                '<' +
-                tagName +
-                (tagName === 'ol' ? ` start=${value}` : '') +
-                '>'
-            const closingTag = '</' + tagName + '>'
+            const { children } = ast[0]
+            html += '<ul>' + buildListHtml(children) + '</ul>'
+            ast.shift()
 
-            html += openingTag + content + closingTag
+            continue
+        }
+
+        if (ast[0].type === 'OrderedList') {
+            const { value, children } = ast[0]
+            html +=
+                '<ol start="' + value + '">' + buildListHtml(children) + '</ol>'
             ast.shift()
 
             continue

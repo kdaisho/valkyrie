@@ -17,8 +17,6 @@ export default function (input: string) {
 
     while (chars.length) {
         if (isLineBreak(chars[0])) {
-            pop(chars)
-
             depth = 0
 
             if (tokens.length) {
@@ -26,6 +24,16 @@ export default function (input: string) {
                 tokens = []
             }
 
+            if (peek(chars) === '\n') {
+                // double newline means a whiteline
+                lexicalBlocks.push([
+                    {
+                        type: 'Whiteline',
+                    },
+                ])
+            }
+
+            pop(chars)
             continue
         }
 
@@ -100,7 +108,7 @@ export default function (input: string) {
 
             if (isList) {
                 tokens.push({
-                    type: 'List',
+                    type: 'OrderedList',
                     value: symbol,
                 })
             } else {

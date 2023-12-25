@@ -15,3 +15,13 @@ export type List = {
     depth: number
     children: (Text | List)[]
 }
+
+export type OrderedList = {
+    type: 'OrderedList'
+    value: string
+    children: Text[]
+}
+
+export type Whiteline = {
+    type: 'Whiteline'
+}
