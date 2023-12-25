@@ -8,8 +8,8 @@ export const pipe =
 
 export const peek = (arr: string[]) => arr[1]
 
-export const pop = (arr: string[]) => {
-    arr.shift()
+export const pop = (arr: string[], count: number = 1) => {
+    arr.splice(0, count)
 }
 
 export const getTextBody = (value: string) => {

@@ -128,6 +128,28 @@ export default function (input: string) {
             continue
         }
 
+        if (
+            chars[0] === '<' &&
+            chars[1] === '!' &&
+            chars[2] === '-' &&
+            chars[3] === '-'
+        ) {
+            while (
+                chars.length &&
+                !(
+                    (chars[0] as string) === '-' &&
+                    (chars[1] as string) === '-' &&
+                    (chars[2] as string) === '>'
+                )
+            ) {
+                pop(chars)
+            }
+
+            pop(chars, 3)
+
+            continue
+        }
+
         if (isCharacter(chars[0])) {
             let value = chars[0]
             pop(chars)
