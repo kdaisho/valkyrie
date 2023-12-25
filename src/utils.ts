@@ -2,7 +2,7 @@
 import { Text, List } from './types'
 
 export const pipe =
-    (...fns: Array<(v: any) => any>) =>
+    (...fns: ((v: any) => any)[]) =>
     (value: any) =>
         fns.reduce((acc, fn) => fn(acc), value)
 

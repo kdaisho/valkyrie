@@ -13,14 +13,14 @@ export default function traverse(ast: Node[]) {
             let item = _ as List | null
             if (item === null) return
 
-            while (listStack.at(-1) && listStack.at(-1)!.depth > item.depth) {
+            while (listStack[listStack.length - 1]?.depth > item.depth) {
                 listStack.pop()
             }
 
             if (!listStack.length) {
                 result.push(item)
-            } else if (stack.at(-1)?.type === 'List') {
-                const parent = listStack.at(-1)!
+            } else if (stack[stack.length - 1].type === 'List') {
+                const parent = listStack[listStack.length - 1]
 
                 if (parent.depth === item.depth) {
                     parent.children.push(...item.children)
@@ -40,8 +40,8 @@ export default function traverse(ast: Node[]) {
 
             if (!orderedListStack.length) {
                 result.push(item)
-            } else if (stack.at(-1)?.type === 'OrderedList') {
-                const parent = orderedListStack.at(-1)!
+            } else if (stack[stack.length - 1].type === 'OrderedList') {
+                const parent = orderedListStack[orderedListStack.length - 1]
                 parent.children.push(...item.children)
             } else {
                 result.push(item)
