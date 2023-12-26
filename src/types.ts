@@ -63,6 +63,27 @@ export type Anchor = {
 //     ],
 // }
 
+// Hi [Goo](https://goo.com) main.
+
+// const textTokens = [
+//     {
+//         type: 'Paragraph',
+//     },
+//     {
+//         type: 'Text',
+//         value: 'Hi',
+//     },
+//     {
+//         type: 'Anchor',
+//         text: 'Google',
+//         href: 'https://google.com',
+//     },
+//     {
+//         type: 'Text',
+//         value: 'man',
+//     },
+// ]
+
 // const text = {
 //     type: 'Paragraph',
 //     children: [

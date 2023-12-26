@@ -17,7 +17,6 @@ export const getTextBody = (value: string) => {
         .replace(/(\*\*|__)(?=\S)([^*_]+?)(?<=\S)\1/g, '<strong>$2</strong>')
         .replace(/<!--.*?-->/g, '')
         .replace(/\s{2,}/g, ' ')
-        .trim()
 }
 
 export function buildListHtml(nodes: (Text | List)[]) {

@@ -1,6 +1,6 @@
-import { Heading, Text, List, OrderedList, Whiteline } from './types'
+import { Heading, List, OrderedList, Paragraph, Text, Whiteline } from './types'
 
-type Node = Heading | Text | List | OrderedList | Whiteline
+type Node = Heading | List | OrderedList | Paragraph | Text | Whiteline
 
 export default function traverse(ast: Node[]) {
     const output: Node[] = []
@@ -42,6 +42,13 @@ export default function traverse(ast: Node[]) {
             }
 
             olStack.push(node)
+        } else if (node.type === 'Paragraph') {
+            const lastItem = stack[stack.length - 1]
+            if (lastItem?.type === 'Paragraph') {
+                lastItem.children.push(...node.children)
+            } else {
+                output.push(node)
+            }
         } else {
             output.push(node)
         }

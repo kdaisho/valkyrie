@@ -1,6 +1,14 @@
-import { Heading, List, OrderedList, Anchor, Text, Whiteline } from './types'
+import {
+    Heading,
+    List,
+    OrderedList,
+    Anchor,
+    Paragraph,
+    Text,
+    Whiteline,
+} from './types'
 
-type Node = Heading | List | OrderedList | Anchor | Text | Whiteline
+type Node = Heading | List | OrderedList | Anchor | Paragraph | Text | Whiteline
 
 function parse(nodes: Node[][]) {
     console.log('==> Parse', nodes)
@@ -39,6 +47,13 @@ function parse(nodes: Node[][]) {
 
         if (first.type === 'Anchor' || first.type === 'Whiteline') {
             element = first
+        }
+
+        if (first.type === 'Paragraph') {
+            const _ = element as Paragraph
+            _.type = 'Paragraph'
+            _.children = rest as (Text | Anchor)[]
+            element = _
         }
 
         if (first.type === 'Text') {

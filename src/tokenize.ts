@@ -39,7 +39,7 @@ export default function (input: string) {
             continue
         }
 
-        if (isWhitespace(chars[0])) {
+        if (isWhitespace(chars[0]) && !tokens.length) {
             depth++
             pop(chars)
 
@@ -152,9 +152,15 @@ export default function (input: string) {
             continue
         }
 
-        if (isCharacter(chars[0])) {
+        if (isWhitespace(chars[0]) || isCharacter(chars[0])) {
             let value = chars[0]
             pop(chars)
+
+            if (tokens[0]?.type !== 'Paragraph') {
+                tokens.push({
+                    type: 'Paragraph',
+                })
+            }
 
             while (
                 chars.length &&
@@ -163,6 +169,7 @@ export default function (input: string) {
                 !isLineBreak(chars[0])
             ) {
                 value += chars[0]
+                console.log('==> EACH', { value })
                 pop(chars)
             }
 
