@@ -6,6 +6,8 @@ import {
     isNumber,
     isDot,
     isCharacter,
+    isOpeningSquareBracket,
+    isOpeningBracket,
 } from './identity'
 import { peek, pop } from './utils'
 
@@ -154,7 +156,12 @@ export default function (input: string) {
             let value = chars[0]
             pop(chars)
 
-            while (!isLineBreak(chars[0]) && chars.length) {
+            while (
+                chars.length &&
+                !isOpeningBracket(chars[0]) &&
+                !isOpeningSquareBracket(chars[0]) &&
+                !isLineBreak(chars[0])
+            ) {
                 value += chars[0]
                 pop(chars)
             }
@@ -162,6 +169,82 @@ export default function (input: string) {
             tokens.push({
                 type: 'Text',
                 value,
+            })
+
+            continue
+        }
+
+        // Anchor without value (https://google.com)
+        if (isOpeningBracket(chars[0])) {
+            let href = ''
+            pop(chars)
+
+            while (chars.length && chars[0] !== ')') {
+                href += chars[0]
+                pop(chars)
+            }
+
+            if (chars.length) {
+                pop(chars)
+            }
+
+            if (href.startsWith('http://') || href.startsWith('https://')) {
+                tokens.push({
+                    type: 'Anchor',
+                    href,
+                })
+
+                continue
+            } else {
+                tokens.push({
+                    type: 'Text',
+                    value: '(' + href + ')',
+                })
+
+                continue
+            }
+        }
+
+        // Anchor with value [Google](https://google.com)
+        if (isOpeningSquareBracket(chars[0])) {
+            let text = chars[0]
+            let href = ''
+            pop(chars)
+
+            while (chars.length && chars[0] !== ']') {
+                text += chars[0]
+                pop(chars)
+            }
+
+            if (chars.length) {
+                text += chars[0]
+                pop(chars)
+            }
+
+            if (isOpeningBracket(chars[0])) {
+                pop(chars)
+
+                while (chars.length && chars[0] !== ')') {
+                    href += chars[0]
+                    pop(chars)
+                }
+
+                if (chars.length) {
+                    pop(chars)
+                }
+            } else {
+                tokens.push({
+                    type: 'Text',
+                    value: text,
+                })
+
+                continue
+            }
+
+            tokens.push({
+                type: 'Anchor',
+                text: text.slice(1, -1),
+                href,
             })
 
             continue
