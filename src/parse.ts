@@ -1,13 +1,15 @@
-import { Heading, Text, List, OrderedList, Whiteline } from './types'
+import { Heading, List, OrderedList, Anchor, Text, Whiteline } from './types'
 
-type Node = Heading | Text | List | OrderedList | Whiteline
+type Node = Heading | List | OrderedList | Anchor | Text | Whiteline
 
-function parse(Nodes: Node[][]) {
+function parse(nodes: Node[][]) {
+    console.log('==> Parse', nodes)
+
     let counter = 0
     const ast: Node[] = []
 
-    while (counter < Nodes.length) {
-        const [first, ...rest] = Nodes[counter]
+    while (counter < nodes.length) {
+        const [first, ...rest] = nodes[counter]
         let element = {} as Node
 
         if (first.type === 'Heading') {
@@ -35,6 +37,10 @@ function parse(Nodes: Node[][]) {
             element = _
         }
 
+        if (first.type === 'Anchor' || first.type === 'Whiteline') {
+            element = first
+        }
+
         if (first.type === 'Text') {
             const _ = element as Text
             _.type = 'Text'
@@ -42,13 +48,11 @@ function parse(Nodes: Node[][]) {
             element = _
         }
 
-        if (first.type === 'Whiteline') {
-            element.type = 'Whiteline'
-        }
-
         ast.push(element)
         counter++
     }
+    console.log('==> AST', ast)
+
     return ast
 }
 

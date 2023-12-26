@@ -49,5 +49,7 @@ export default function traverse(ast: Node[]) {
         stack.push(node)
     })
 
+    console.log('==> trvse', output)
+
     return output
 }

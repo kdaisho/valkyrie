@@ -27,7 +27,7 @@ export default function (input: string) {
             }
 
             if (peek(chars) === '\n') {
-                // double newline means a whiteline
+                // two consecutive newline characters mean a whiteline
                 lexicalBlocks.push([
                     {
                         type: 'Whiteline',
@@ -56,7 +56,7 @@ export default function (input: string) {
                 pop(chars)
             }
 
-            while (!isLineBreak(chars[0])) {
+            while (chars.length && !isLineBreak(chars[0])) {
                 value += chars[0]
                 pop(chars)
             }

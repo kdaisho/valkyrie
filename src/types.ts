@@ -38,7 +38,7 @@ export type Whiteline = {
 // [Google](https://google.com) -> <a href="https://google.com">Google</a>
 export type Anchor = {
     type: 'Anchor'
-    href: string
+    href: `https://${string}` | `http://${string}`
     text?: string // link text
 }
 

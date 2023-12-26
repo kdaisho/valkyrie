@@ -1,4 +1,4 @@
-import { Heading, Text, List, OrderedList } from './types'
+import { Heading, List, OrderedList, Anchor, Text } from './types'
 import { buildListHtml, getTextBody } from './utils'
 
 const heading: Record<number, string> = {
@@ -10,7 +10,7 @@ const heading: Record<number, string> = {
     6: 'h6',
 }
 
-type AST = (Heading | Text | List | OrderedList)[]
+type AST = (Heading | List | OrderedList | Anchor | Text)[]
 
 function generate(ast: AST) {
     let html = ''
@@ -22,14 +22,6 @@ function generate(ast: AST) {
             const text = children[0].value
             const closingTag = '</' + heading[value.length] + '>'
             html += openingTag + text + closingTag
-            ast.shift()
-
-            continue
-        }
-
-        if (ast[0].type === 'Text') {
-            const { value } = ast[0]
-            html += '<p>' + getTextBody(value) + '</p>'
             ast.shift()
 
             continue
@@ -47,6 +39,22 @@ function generate(ast: AST) {
             const { value, children } = ast[0]
             html +=
                 '<ol start="' + value + '">' + buildListHtml(children) + '</ol>'
+            ast.shift()
+
+            continue
+        }
+
+        if (ast[0].type === 'Anchor') {
+            const { href, text } = ast[0]
+            html += '<a href="' + href + '">' + (text ?? href) + '</a>'
+            ast.shift()
+
+            continue
+        }
+
+        if (ast[0].type === 'Text') {
+            const { value } = ast[0]
+            html += '<p>' + getTextBody(value) + '</p>'
             ast.shift()
 
             continue
