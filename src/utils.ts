@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Text, List, Anchor } from './types'
+import { List, ListItem } from './types'
 
 export const pipe =
     (...fns: ((v: any) => any)[]) =>
@@ -19,7 +19,7 @@ export const getTextBody = (value: string) => {
         .replace(/\s{2,}/g, ' ')
 }
 
-export function buildListHtml(nodes: (List | Anchor | Text)[][]) {
+export function buildListHtml(nodes: (List | ListItem)[]) {
     console.log('==> utils nodes', nodes)
     let html = ''
 

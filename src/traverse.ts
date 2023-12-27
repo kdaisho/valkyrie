@@ -1,7 +1,7 @@
 import {
-    Anchor,
     Heading,
     List,
+    ListItem,
     OrderedList,
     Paragraph,
     Text,
@@ -12,8 +12,8 @@ type Node = Heading | List | OrderedList | Paragraph | Text | Whiteline
 
 export default function traverse(ast: Node[]) {
     const output: Node[] = []
-    const liStack: (List | Anchor | Text)[] = []
-    const liItemStack: (Anchor | Text)[] = []
+    const liStack: List[] = []
+    const liItemStack: (List | ListItem)[] = []
     const olStack: OrderedList[] = []
     const stack: Node[] = []
 
