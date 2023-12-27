@@ -54,7 +54,11 @@ function parse(nodes: Node[][]) {
             const _ = element as OrderedList
             _.type = 'OrderedList'
             _.value = first.value
-            _.children = rest as Text[]
+            const listItem: ListItem = {
+                type: 'ListItem',
+                children: rest as (List | Anchor | Text)[],
+            }
+            _.children = [listItem]
             element = _
         }
 

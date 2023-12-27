@@ -21,15 +21,15 @@ export type List = {
     children: (List | ListItem)[]
 }
 
-export type ListItem = {
-    type: 'ListItem'
-    children: (List | Anchor | Text)[]
-}
-
 export type OrderedList = {
     type: 'OrderedList'
     value: string
-    children: Text[]
+    children: (List | ListItem)[]
+}
+
+export type ListItem = {
+    type: 'ListItem'
+    children: (List | Anchor | Text)[]
 }
 
 export type Whiteline = {
