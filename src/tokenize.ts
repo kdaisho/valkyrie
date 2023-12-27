@@ -152,11 +152,12 @@ export default function (input: string) {
             continue
         }
 
+        // Paragraph
         if (isWhitespace(chars[0]) || isCharacter(chars[0])) {
             let value = chars[0]
             pop(chars)
 
-            if (tokens[0]?.type !== 'Paragraph') {
+            if (!tokens.length) {
                 tokens.push({
                     type: 'Paragraph',
                 })
@@ -169,7 +170,6 @@ export default function (input: string) {
                 !isLineBreak(chars[0])
             ) {
                 value += chars[0]
-                console.log('==> EACH', { value })
                 pop(chars)
             }
 

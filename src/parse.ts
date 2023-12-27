@@ -33,7 +33,11 @@ function parse(nodes: Node[][]) {
             _.type = 'List'
             _.value = first.value
             _.depth = first.depth
-            _.children = rest as (List | Text)[]
+            const listItem = {
+                type: 'ListItem',
+                children: rest,
+            }
+            _.children = [listItem]
             element = _
         }
 

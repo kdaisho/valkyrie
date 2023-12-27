@@ -18,7 +18,8 @@ export type List = {
     type: 'List'
     value: string
     depth: number
-    children: (Text | List)[]
+    children: (List | Anchor | Text)[][]
+    // children: any[][]
 }
 
 export type OrderedList = {

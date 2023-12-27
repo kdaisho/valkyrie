@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Text, List } from './types'
+import { Text, List, Anchor } from './types'
 
 export const pipe =
     (...fns: ((v: any) => any)[]) =>
@@ -19,21 +19,39 @@ export const getTextBody = (value: string) => {
         .replace(/\s{2,}/g, ' ')
 }
 
-export function buildListHtml(nodes: (Text | List)[]) {
+export function buildListHtml(nodes: (List | Anchor | Text)[][]) {
+    console.log('==> utils nodes', nodes)
     let html = ''
 
-    nodes.forEach(_ => {
-        if (_.type === 'Text') {
-            html += '<li>' + getTextBody(_.value) + '</li>'
+    nodes.forEach(n => {
+        console.log('==> N', n)
+
+        if (n.type === 'List') {
+            console.log('==> WOW _4', n)
+            html += '<ul>' + buildListHtml(n.children) + '</ul>'
+            return
         }
 
-        if (_.type === 'List') {
-            const list = _ as List
-            const { children } = list
+        html += '<li>'
 
-            html += '<ul>' + buildListHtml(children) + '</ul>'
-        }
+        n.children.forEach(_ => {
+            console.log('==> WOW1', _)
+
+            if (_.type === 'Text') {
+                html += getTextBody(_.value)
+            }
+
+            if (_.type === 'Anchor') {
+                html +=
+                    `<a href="${_.href}">` +
+                    getTextBody(_.text ?? _.href) +
+                    '</a>'
+            }
+        })
+        html += '</li>'
     })
+
+    console.log('==> HTML', html)
 
     return html
 }
