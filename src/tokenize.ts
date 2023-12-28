@@ -15,20 +15,20 @@ export default function (input: string) {
     const chars = input.split('')
     let depth = 0
     let tokens = []
-    const lexicalBlocks = []
+    const LexicalRepresentation = []
 
     while (chars.length) {
         if (isLineBreak(chars[0])) {
             depth = 0
 
             if (tokens.length) {
-                lexicalBlocks.push(tokens)
+                LexicalRepresentation.push(tokens)
                 tokens = []
             }
 
             if (peek(chars) === '\n') {
                 // two consecutive newline characters mean a whiteline
-                lexicalBlocks.push([
+                LexicalRepresentation.push([
                     {
                         type: 'Whiteline',
                     },
@@ -260,9 +260,9 @@ export default function (input: string) {
     }
 
     if (!chars.length && tokens.length) {
-        lexicalBlocks.push(tokens)
+        LexicalRepresentation.push(tokens)
         tokens = []
     }
 
-    return lexicalBlocks
+    return LexicalRepresentation
 }
