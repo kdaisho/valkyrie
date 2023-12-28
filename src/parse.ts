@@ -20,8 +20,6 @@ type Node =
     | Whiteline
 
 function parse(nodes: Node[][]) {
-    console.log('==> Parse', nodes)
-
     let counter = 0
     const ast: Node[] = []
 

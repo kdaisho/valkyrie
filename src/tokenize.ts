@@ -105,7 +105,7 @@ export default function (input: string) {
 
             while (isDot(chars[0]) && isWhitespace(peek(chars))) {
                 isList = true
-                pop(chars)
+                pop(chars, 2)
             }
 
             if (isList) {
@@ -115,17 +115,16 @@ export default function (input: string) {
                 })
             } else {
                 value += symbol
-            }
+                while (!isLineBreak(chars[0]) && chars.length) {
+                    value += chars[0]
+                    pop(chars)
+                }
 
-            while (!isLineBreak(chars[0]) && chars.length) {
-                value += chars[0]
-                pop(chars)
+                tokens.push({
+                    type: 'Text',
+                    value: value.trim(),
+                })
             }
-
-            tokens.push({
-                type: 'Text',
-                value: value.trim(),
-            })
 
             continue
         }

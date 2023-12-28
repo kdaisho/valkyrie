@@ -3,7 +3,7 @@ const LINE_BREAK = '\n'
 const WHITESPACE = / / // '\s' includes line break ('\n') so we use ' ' instead
 const LETTER = /[a-z]/i
 const NUMBER = /\d+/
-const SPECIAL_CHARACTERS = /^[_@$%&'",!?;:\-*<->]+$/
+const SPECIAL_CHARACTERS = /^[_@$%&'",!?;:\-*<->.]+$/
 const HYPHEN = '-'
 const DOT = '.'
 

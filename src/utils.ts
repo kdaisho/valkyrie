@@ -20,14 +20,10 @@ export const getTextBody = (value: string) => {
 }
 
 export function buildListHtml(nodes: (List | ListItem)[]) {
-    console.log('==> utils nodes', nodes)
     let html = ''
 
     nodes.forEach(n => {
-        console.log('==> N', n)
-
         if (n.type === 'List') {
-            console.log('==> WOW _4', n)
             html += '<ul>' + buildListHtml(n.children) + '</ul>'
             return
         }
@@ -35,8 +31,6 @@ export function buildListHtml(nodes: (List | ListItem)[]) {
         html += '<li>'
 
         n.children.forEach(_ => {
-            console.log('==> WOW1', _)
-
             if (_.type === 'Text') {
                 html += getTextBody(_.value)
             }
@@ -50,8 +44,6 @@ export function buildListHtml(nodes: (List | ListItem)[]) {
         })
         html += '</li>'
     })
-
-    console.log('==> HTML', html)
 
     return html
 }
