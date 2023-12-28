@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Text, List, Anchor } from './types'
+import { List, ListItem } from './types'
 
 export const pipe =
     (...fns: ((v: any) => any)[]) =>
@@ -19,15 +19,11 @@ export const getTextBody = (value: string) => {
         .replace(/\s{2,}/g, ' ')
 }
 
-export function buildListHtml(nodes: (List | Anchor | Text)[][]) {
-    console.log('==> utils nodes', nodes)
+export function buildListHtml(nodes: (List | ListItem)[]) {
     let html = ''
 
     nodes.forEach(n => {
-        console.log('==> N', n)
-
         if (n.type === 'List') {
-            console.log('==> WOW _4', n)
             html += '<ul>' + buildListHtml(n.children) + '</ul>'
             return
         }
@@ -35,8 +31,6 @@ export function buildListHtml(nodes: (List | Anchor | Text)[][]) {
         html += '<li>'
 
         n.children.forEach(_ => {
-            console.log('==> WOW1', _)
-
             if (_.type === 'Text') {
                 html += getTextBody(_.value)
             }
@@ -50,8 +44,6 @@ export function buildListHtml(nodes: (List | Anchor | Text)[][]) {
         })
         html += '</li>'
     })
-
-    console.log('==> HTML', html)
 
     return html
 }

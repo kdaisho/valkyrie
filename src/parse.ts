@@ -6,13 +6,20 @@ import {
     Paragraph,
     Text,
     Whiteline,
+    ListItem,
 } from './types'
 
-type Node = Heading | List | OrderedList | Anchor | Paragraph | Text | Whiteline
+type Node =
+    | Heading
+    | List
+    | ListItem
+    | OrderedList
+    | Anchor
+    | Paragraph
+    | Text
+    | Whiteline
 
 function parse(nodes: Node[][]) {
-    console.log('==> Parse', nodes)
-
     let counter = 0
     const ast: Node[] = []
 
@@ -33,9 +40,9 @@ function parse(nodes: Node[][]) {
             _.type = 'List'
             _.value = first.value
             _.depth = first.depth
-            const listItem = {
+            const listItem: ListItem = {
                 type: 'ListItem',
-                children: rest,
+                children: rest as (List | Anchor | Text)[],
             }
             _.children = [listItem]
             element = _
@@ -45,7 +52,11 @@ function parse(nodes: Node[][]) {
             const _ = element as OrderedList
             _.type = 'OrderedList'
             _.value = first.value
-            _.children = rest as Text[]
+            const listItem: ListItem = {
+                type: 'ListItem',
+                children: rest as (List | Anchor | Text)[],
+            }
+            _.children = [listItem]
             element = _
         }
 
