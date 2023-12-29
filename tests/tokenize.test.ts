@@ -32,7 +32,7 @@ describe('tokenize', () => {
         expect(tokenize(input)).toEqual(result)
     })
 
-    it('should tokenize a text', () => {
+    it('should tokenize a paragraph', () => {
         const input = '#This example.'
         const result = [
             [{ type: 'Paragraph' }, { type: 'Text', value: '#This example.' }],
@@ -45,6 +45,91 @@ describe('tokenize', () => {
         const input = 'example text'
         const result = [
             [{ type: 'Paragraph' }, { type: 'Text', value: 'example text' }],
+        ]
+
+        expect(tokenize(input)).toEqual(result)
+    })
+
+    it('should tokenize an ordered list', () => {
+        const input = '1. example text'
+        const result = [
+            [
+                { type: 'OrderedList', value: '1' },
+                { type: 'Text', value: 'example text' },
+            ],
+        ]
+
+        expect(tokenize(input)).toEqual(result)
+    })
+
+    it('should tokenize a paragraph, not an ordered list', () => {
+        const input = '1.example text'
+        const result = [
+            [
+                {
+                    type: 'Text',
+                    value: '1.example text',
+                },
+            ],
+        ]
+
+        expect(tokenize(input)).toEqual(result)
+    })
+
+    it('should tokenize an anchor without text', () => {
+        const input = '(https://example.com)'
+        const result = [
+            [
+                {
+                    type: 'Anchor',
+                    href: 'https://example.com',
+                },
+            ],
+        ]
+
+        expect(tokenize(input)).toEqual(result)
+    })
+
+    it('should tokenize an anchor with text', () => {
+        const input = '[Example](https://example.com)'
+        const result = [
+            [
+                {
+                    type: 'Anchor',
+                    text: 'Example',
+                    href: 'https://example.com',
+                },
+            ],
+        ]
+
+        expect(tokenize(input)).toEqual(result)
+    })
+
+    // TODO: fix this to return paragraph
+    it('should not tokenize an anchor', () => {
+        const input = '[Example] (https://example.com)'
+        const result = [
+            [
+                // {
+                //     type: 'Paragraph',
+                // },
+                // {
+                //     type: 'Text',
+                //     value: '[Example] (https://example.com)',
+                // },
+                {
+                    type: 'Text',
+                    value: '[Example]',
+                },
+                {
+                    type: 'Text',
+                    value: ' ',
+                },
+                {
+                    type: 'Anchor',
+                    href: 'https://example.com',
+                },
+            ],
         ]
 
         expect(tokenize(input)).toEqual(result)

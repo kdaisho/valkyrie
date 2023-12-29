@@ -253,5 +253,7 @@ export default function (input: string) {
         tokens = []
     }
 
+    console.log('==>', LexicalRepresentation)
+
     return LexicalRepresentation
 }
