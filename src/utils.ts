@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { List, ListItem } from './types'
+import { List, ListItem } from '../types'
 
 export const pipe =
     (...fns: ((v: any) => any)[]) =>

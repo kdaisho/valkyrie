@@ -6,7 +6,7 @@ import {
     Paragraph,
     Text,
     Whiteline,
-} from './types'
+} from '../types'
 
 type Node = Heading | List | OrderedList | Paragraph | Text | Whiteline
 

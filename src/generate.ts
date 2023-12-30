@@ -1,4 +1,4 @@
-import { Heading, List, OrderedList, Anchor, Paragraph, Text } from './types'
+import { Heading, List, OrderedList, Anchor, Paragraph, Text } from '../types'
 import { buildListHtml, getTextBody } from './utils'
 
 const heading: Record<number, string> = {

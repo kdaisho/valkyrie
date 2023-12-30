@@ -5,21 +5,12 @@ import {
     Anchor,
     Paragraph,
     Text,
-    Whiteline,
     ListItem,
-} from './types'
+    Node,
+    Token,
+} from '../types'
 
-type Node =
-    | Heading
-    | List
-    | ListItem
-    | OrderedList
-    | Anchor
-    | Paragraph
-    | Text
-    | Whiteline
-
-function parse(nodes: Node[][]) {
+function parse(nodes: Token[][]) {
     let counter = 0
     const ast: Node[] = []
 
@@ -68,13 +59,6 @@ function parse(nodes: Node[][]) {
             const _ = element as Paragraph
             _.type = 'Paragraph'
             _.children = rest as (Text | Anchor)[]
-            element = _
-        }
-
-        if (first.type === 'Text') {
-            const _ = element as Text
-            _.type = 'Text'
-            _.value = first.value
             element = _
         }
 
