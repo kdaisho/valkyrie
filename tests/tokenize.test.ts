@@ -2,7 +2,6 @@ import tokenize from '../src/tokenize'
 
 describe('tokenize', () => {
     it('should return an array', () => {
-        console.log('==> test', tokenize(''))
         expect(Array.isArray(tokenize(''))).toBe(true)
     })
 
@@ -76,6 +75,27 @@ describe('tokenize', () => {
         expect(tokenize(input)).toEqual(result)
     })
 
+    it('should tokenize an unordered list', () => {
+        const input = '- example text'
+        const result = [
+            [
+                { type: 'List', value: '-', depth: 0 },
+                { type: 'Text', value: 'example text' },
+            ],
+        ]
+
+        expect(tokenize(input)).toEqual(result)
+    })
+
+    it('should tokenize a paragraph', () => {
+        const input = '-example text'
+        const result = [
+            [{ type: 'Paragraph' }, { type: 'Text', value: '-example text' }],
+        ]
+
+        expect(tokenize(input)).toEqual(result)
+    })
+
     it('should tokenize an anchor without text', () => {
         const input = '(https://example.com)'
         const result = [
@@ -105,18 +125,27 @@ describe('tokenize', () => {
         expect(tokenize(input)).toEqual(result)
     })
 
-    // TODO: fix this to return paragraph
-    it('should not tokenize an anchor', () => {
+    it('should tokenize an anchor without text', () => {
+        const input = '(https://example.com)'
+        const result = [
+            [
+                {
+                    type: 'Anchor',
+                    href: 'https://example.com',
+                },
+            ],
+        ]
+
+        expect(tokenize(input)).toEqual(result)
+    })
+
+    it('should tokenize a paragraph and an anchor without text', () => {
         const input = '[Example] (https://example.com)'
         const result = [
             [
-                // {
-                //     type: 'Paragraph',
-                // },
-                // {
-                //     type: 'Text',
-                //     value: '[Example] (https://example.com)',
-                // },
+                {
+                    type: 'Paragraph',
+                },
                 {
                     type: 'Text',
                     value: '[Example]',
@@ -131,6 +160,23 @@ describe('tokenize', () => {
                 },
             ],
         ]
+
+        expect(tokenize(input)).toEqual(result)
+    })
+
+    it('should not tokenize a single line comment', () => {
+        const input = '<!-- This is a comment -->'
+        const result: string[] = []
+
+        expect(tokenize(input)).toEqual(result)
+    })
+
+    it('should not tokenize a multiline comment', () => {
+        const input = `<!-- hello
+            this is
+            multiline
+            comments -->`
+        const result: string[] = []
 
         expect(tokenize(input)).toEqual(result)
     })

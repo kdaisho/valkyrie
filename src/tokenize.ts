@@ -229,6 +229,9 @@ export default function (input: string) {
                 }
             } else {
                 tokens.push({
+                    type: 'Paragraph',
+                })
+                tokens.push({
                     type: 'Text',
                     value: text,
                 })
@@ -252,8 +255,6 @@ export default function (input: string) {
         LexicalRepresentation.push(tokens)
         tokens = []
     }
-
-    console.log('==>', LexicalRepresentation)
 
     return LexicalRepresentation
 }
