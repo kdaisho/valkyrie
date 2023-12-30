@@ -15,20 +15,20 @@ export default function (input: string) {
     const chars = input.split('')
     let depth = 0
     let tokens = []
-    const lexicalBlocks = []
+    const LexicalRepresentation = []
 
     while (chars.length) {
         if (isLineBreak(chars[0])) {
             depth = 0
 
             if (tokens.length) {
-                lexicalBlocks.push(tokens)
+                LexicalRepresentation.push(tokens)
                 tokens = []
             }
 
             if (peek(chars) === '\n') {
                 // two consecutive newline characters mean a whiteline
-                lexicalBlocks.push([
+                LexicalRepresentation.push([
                     {
                         type: 'Whiteline',
                     },
@@ -42,34 +42,6 @@ export default function (input: string) {
         if (isWhitespace(chars[0]) && !tokens.length) {
             depth++
             pop(chars)
-
-            continue
-        }
-
-        if (isPoundKey(chars[0])) {
-            let symbol = chars[0]
-            let value = ''
-            pop(chars)
-
-            while (isPoundKey(chars[0])) {
-                symbol += chars[0]
-                pop(chars)
-            }
-
-            while (chars.length && !isLineBreak(chars[0])) {
-                value += chars[0]
-                pop(chars)
-            }
-
-            tokens.push({
-                type: 'Heading',
-                value: symbol,
-            })
-
-            tokens.push({
-                type: 'Text',
-                value: value.trim(),
-            })
 
             continue
         }
@@ -151,9 +123,26 @@ export default function (input: string) {
             continue
         }
 
-        // Paragraph
+        // Paragraph or Heading
         if (isWhitespace(chars[0]) || isCharacter(chars[0])) {
-            let value = chars[0]
+            let symbol = ''
+
+            while (isPoundKey(chars[0])) {
+                symbol += chars[0]
+                pop(chars)
+            }
+
+            if (symbol && isWhitespace(chars[0])) {
+                pop(chars)
+                tokens.push({
+                    type: 'Heading',
+                    value: symbol,
+                })
+
+                continue
+            }
+
+            let value = symbol + chars[0]
             pop(chars)
 
             if (!tokens.length) {
@@ -240,6 +229,9 @@ export default function (input: string) {
                 }
             } else {
                 tokens.push({
+                    type: 'Paragraph',
+                })
+                tokens.push({
                     type: 'Text',
                     value: text,
                 })
@@ -260,9 +252,9 @@ export default function (input: string) {
     }
 
     if (!chars.length && tokens.length) {
-        lexicalBlocks.push(tokens)
+        LexicalRepresentation.push(tokens)
         tokens = []
     }
 
-    return lexicalBlocks
+    return LexicalRepresentation
 }
