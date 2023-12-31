@@ -47,6 +47,8 @@ export type Anchor = {
     text?: string // link text
 }
 
+export type AST = (Heading | List | OrderedList | Anchor | Paragraph | Text)[]
+
 export type Node =
     | Heading
     | List

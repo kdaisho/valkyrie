@@ -1,4 +1,4 @@
-import { Heading, List, OrderedList, Anchor, Paragraph, Text } from '../types'
+import { AST } from '../types'
 import { buildListHtml, getTextBody } from './utils'
 
 const heading: Record<number, string> = {
@@ -9,8 +9,6 @@ const heading: Record<number, string> = {
     5: 'h5',
     6: 'h6',
 }
-
-type AST = (Heading | List | OrderedList | Anchor | Paragraph | Text)[]
 
 function generate(ast: AST) {
     let html = ''
@@ -68,14 +66,6 @@ function generate(ast: AST) {
                 return acc
             }, '')
             html += '<p>' + body + '</p>'
-            ast.shift()
-
-            continue
-        }
-
-        if (ast[0].type === 'Text') {
-            const { value } = ast[0]
-            html += '<p>' + getTextBody(value) + '</p>'
             ast.shift()
 
             continue
