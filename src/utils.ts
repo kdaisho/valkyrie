@@ -25,7 +25,7 @@ export function buildListHtml(
 ) {
     let html = ''
 
-    console.log('==>', 1000, nodes)
+    // console.log('==>', 1000, nodes)
 
     nodes.forEach(n => {
         if (n.type === 'List') {
@@ -52,10 +52,10 @@ export function buildListHtml(
 
         html += '<li>'
 
-        console.log('==>', 3000, n)
+        // console.log('==>', 3000, n)
 
         n.children.forEach(_ => {
-            console.log('==>', 3001, _)
+            // console.log('==>', 3001, _)
 
             if (_.type === 'Text') {
                 html += getTextBody(_.value)
