@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { List, ListItem } from '../types'
+import { List, ListItem, OrderedList } from '../types'
 
 export const pipe =
     (...fns: ((v: any) => any)[]) =>
@@ -19,12 +19,24 @@ export const getTextBody = (value: string) => {
         .replace(/\s{2,}/g, ' ')
 }
 
-export function buildListHtml(nodes: (List | ListItem)[]) {
+export function buildListHtml(nodes: (List | OrderedList | ListItem)[]) {
     let html = ''
+
+    console.log('==>', 200, nodes)
 
     nodes.forEach(n => {
         if (n.type === 'List') {
             html += '<ul>' + buildListHtml(n.children) + '</ul>'
+            return
+        }
+
+        if (n.type === 'OrderedList') {
+            html +=
+                '<ol start="' +
+                n.value +
+                '">' +
+                buildListHtml(n.children) +
+                '</ol>'
             return
         }
 

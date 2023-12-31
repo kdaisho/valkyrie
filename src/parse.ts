@@ -43,6 +43,7 @@ function parse(nodes: Token[][]) {
             const _ = element as OrderedList
             _.type = 'OrderedList'
             _.value = first.value
+            _.depth = first.depth
             const listItem: ListItem = {
                 type: 'ListItem',
                 children: rest as (List | Anchor | Text)[],

@@ -84,6 +84,7 @@ export default function (input: string) {
                 tokens.push({
                     type: 'OrderedList',
                     value: symbol,
+                    depth,
                 })
             } else {
                 value += symbol
