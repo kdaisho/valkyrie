@@ -18,33 +18,34 @@ export type List = {
     type: 'List'
     value: string
     depth: number
-    children: (List | ListItem)[]
+    children: (List | OrderedList | ListItem)[]
 }
 
 export type OrderedList = {
     type: 'OrderedList'
     value: string
-    children: (List | ListItem)[]
+    depth: number
+    children: (List | OrderedList | ListItem)[]
 }
 
 export type ListItem = {
     type: 'ListItem'
-    children: (List | Anchor | Text)[]
+    children: (List | OrderedList | Anchor | Text)[]
 }
 
 export type Whiteline = {
     type: 'Whiteline'
 }
 
-// without value
+// without text
 // (https://google.com) -> <a href="https://google.com">https://google.com</a>
 
-// with value
+// with text
 // [Google](https://google.com) -> <a href="https://google.com">Google</a>
 export type Anchor = {
     type: 'Anchor'
     href: `https://${string}` | `http://${string}`
-    text?: string // link text
+    text?: string
 }
 
 export type AST = (Heading | List | OrderedList | Anchor | Paragraph | Text)[]
@@ -72,6 +73,7 @@ export type Token =
     | {
           type: 'OrderedList'
           value: string
+          depth: number
       }
     | {
           type: 'Paragraph'

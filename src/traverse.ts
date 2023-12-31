@@ -2,29 +2,50 @@ import { List, ListItem, OrderedList, Node } from '../types'
 
 export default function traverse(ast: Node[]) {
     const output: Node[] = []
-    const liStack: List[] = []
-    const liItemStack: (List | ListItem)[] = []
-    const olStack: OrderedList[] = []
+    const liStack: (List | OrderedList)[] = []
+    const liItemStack: (List | OrderedList | ListItem)[] = []
     const stack: Node[] = []
 
     ast.forEach(node => {
         if (node.type === 'List') {
             let _node = node as List | null
+
             if (_node === null) return
 
             while (liStack[liStack.length - 1]?.depth > _node.depth) {
                 liStack.pop()
             }
 
-            if (stack[stack.length - 1]?.type === 'List') {
+            if (
+                stack[stack.length - 1]?.type === 'List' ||
+                stack[stack.length - 1]?.type === 'OrderedList'
+            ) {
                 const parent = liStack[liStack.length - 1]
 
                 if (parent.depth === _node.depth) {
-                    parent.children.push(..._node.children)
+                    if (parent.type === 'List') {
+                        parent.children.push(..._node.children)
+                    } else {
+                        if (
+                            liItemStack[liItemStack.length - 1].type ===
+                                'List' ||
+                            (liItemStack[liItemStack.length - 1].type ===
+                                'OrderedList' &&
+                                (
+                                    liItemStack[liItemStack.length - 1] as
+                                        | List
+                                        | OrderedList
+                                ).depth > _node.depth)
+                        ) {
+                            liStack.push(_node)
+                            output.push(_node)
+                        } else {
+                            parent.children.push(..._node.children)
+                        }
+                    }
                     _node = null
                 } else {
-                    liItemStack.push(..._node.children)
-                    parent.children.push(_node)
+                    liStack[liStack.length - 1].children.push(_node)
                 }
             } else {
                 output.push(_node)
@@ -36,18 +57,31 @@ export default function traverse(ast: Node[]) {
             }
         } else if (node.type === 'OrderedList') {
             let _node = node as OrderedList | null
+
             if (_node === null) return
 
-            if (stack[stack.length - 1]?.type === 'OrderedList') {
-                const parent = olStack[olStack.length - 1]
-                parent.children.push(..._node.children)
-                _node = null
+            while (liStack[liStack.length - 1]?.depth > _node.depth) {
+                liStack.pop()
+            }
+
+            if (
+                stack[stack.length - 1]?.type === 'OrderedList' ||
+                stack[stack.length - 1]?.type === 'List'
+            ) {
+                const parent = liStack[liStack.length - 1]
+                if (parent.depth === _node.depth) {
+                    liStack[liStack.length - 1].children.push(..._node.children)
+                    _node = null
+                } else {
+                    liStack[liStack.length - 1].children.push(_node)
+                }
             } else {
                 output.push(_node)
             }
 
             if (_node) {
-                olStack.push(_node)
+                liItemStack.push(_node)
+                liStack.push(_node)
             }
         } else {
             output.push(node)

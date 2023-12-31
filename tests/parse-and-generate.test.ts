@@ -114,23 +114,22 @@ describe('parse-and-generate', () => {
         `
 
         expect(parseAndGenerate(input)).toBe(
-            '<ol start="1"><li>Ordered item</li><li>Another ordered item</li></ol><ul><li>Unordered item</li><li>Another unordered item</li></ul>'
+            '<ol start="1"><li>Ordered item</li><li>Another ordered item</li><ul><li>Unordered item</li><li>Another unordered item</li></ul></ol>'
         )
     })
 
-    // TODO: make this work
-    // it('should return a nested <ul> with <ol>', () => {
-    //     input = `
-    //         - First item
-    //         - Second item
-    //             1. Ordered item
-    //             2. Another ordered item
-    //     `
+    it('should return a nested <ul> with <ol>', () => {
+        input = `
+            - First item
+            - Second item
+                1. Ordered item
+                2. Another ordered item
+        `
 
-    //     expect(parseAndGenerate(input)).toBe(
-    //         '<ul><li>First item</li><li>Second item<ol start="1"><li>Ordered item</li><li>Another ordered item</li></ol></li></ul>'
-    //     )
-    // })
+        expect(parseAndGenerate(input)).toBe(
+            '<ul><li>First item</li><li>Second item</li><ol start="1"><li>Ordered item</li><li>Another ordered item</li></ol></ul>'
+        )
+    })
 
     it('should return <ol> while respecting the first number', () => {
         input = `
@@ -152,6 +151,85 @@ describe('parse-and-generate', () => {
 
         expect(parseAndGenerate(input)).toBe(
             '<ul><li>List item <a href="https://example.com">Example</a>, yes.</li><ul><li>Nested item => <a href="https://example.com">https://example.com</a>, eh?</li></ul></ul>'
+        )
+    })
+
+    it('should return a complex list with nest cancelation', () => {
+        input = `
+            1. One1
+                1. Two
+            - Three
+                3. Four
+        `
+
+        expect(parseAndGenerate(input)).toBe(
+            '<ol start="1"><li>One1</li><ol start="1"><li>Two</li></ol></ol><ul><li>Three</li><ol start="3"><li>Four</li></ol></ul>'
+        )
+    })
+
+    it('should return a complex list while forcing parent list type for the same hierarchy', () => {
+        input = `
+            1. One2
+                1. Two
+                - Three
+                3. Four
+        `
+
+        expect(parseAndGenerate(input)).toBe(
+            '<ol start="1"><li>One2</li><ol start="1"><li>Two</li><li>Three</li><li>Four</li></ol></ol>'
+        )
+    })
+
+    it('should return a complex list that allows different list type for different depth', () => {
+        input = `
+            1. One3
+                1. Two
+                    - Three
+                3. Four
+        `
+
+        expect(parseAndGenerate(input)).toBe(
+            '<ol start="1"><li>One3</li><ol start="1"><li>Two</li><ul><li>Three</li></ul><li>Four</li></ol></ol>'
+        )
+    })
+
+    it('should return a complex list with a simple nest cancelation', () => {
+        input = `
+            - One4
+                - Two
+                - Three
+                    - Four
+                - Five
+        `
+
+        expect(parseAndGenerate(input)).toBe(
+            '<ul><li>One4</li><ul><li>Two</li><li>Three</li><ul><li>Four</li></ul><li>Five</li></ul></ul>'
+        )
+    })
+
+    it('should return a complex list with three-level nesting', () => {
+        input = `
+            - One5
+                - Two
+                - Three
+                    - Four
+        `
+
+        expect(parseAndGenerate(input)).toBe(
+            '<ul><li>One5</li><ul><li>Two</li><li>Three</li><ul><li>Four</li></ul></ul></ul>'
+        )
+    })
+
+    it('should return an ordered list with unordered list nesting', () => {
+        input = `
+            1. One
+            2. Two
+                - P1
+                - P2
+        `
+
+        expect(parseAndGenerate(input)).toBe(
+            '<ol start="1"><li>One</li><li>Two</li><ul><li>P1</li><li>P2</li></ul></ol>'
         )
     })
 
