@@ -26,7 +26,6 @@ function generate(ast: AST) {
         }
 
         if (ast[0].type === 'List') {
-            console.log('==>', 100)
             const { children } = ast[0]
             html += '<ul>' + buildListHtml(children) + '</ul>'
             ast.shift()
@@ -35,7 +34,6 @@ function generate(ast: AST) {
         }
 
         if (ast[0].type === 'OrderedList') {
-            console.log('==>', 101)
             const { value, children } = ast[0]
             html +=
                 '<ol start="' + value + '">' + buildListHtml(children) + '</ol>'
