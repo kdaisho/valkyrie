@@ -4,4 +4,4 @@ import traverse from './traverse'
 import generate from './generate'
 import { pipe } from './utils'
 
-export const parseAndGenerate = pipe(tokenize, parse, traverse, generate)
+export default pipe(tokenize, parse, traverse, generate)

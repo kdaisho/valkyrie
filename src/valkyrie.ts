@@ -1,5 +1,5 @@
 import chalk from 'chalk'
-import { parseAndGenerate } from './parse-and-generate'
+import parseAndGenerate from './parse-and-generate'
 
 const [command, ...args] = process.argv.slice(2)
 
