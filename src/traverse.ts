@@ -56,8 +56,7 @@ export default function traverse(ast: Node[]) {
                 liStack.push(_node)
             }
         } else if (node.type === 'OrderedList') {
-            let _node = node as OrderedList | null
-            if (_node === null) return
+            const _node = node as OrderedList
 
             while (liStack[liStack.length - 1]?.depth > _node.depth) {
                 liStack.pop()
