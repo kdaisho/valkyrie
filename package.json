@@ -7,8 +7,7 @@
     "scripts": {
         "lint": "eslint .",
         "bd": "bun build ./src/valkyrie.ts --compile --outfile ./bin/valkyrie",
-        "try": "bun build ./src/valkyrie.ts --compile --outfile ./bin/valkyrie && valkyrie run ./examples/simple.md",
-        "try_": "bun build ./src/valkyrie.ts --compile --outfile ./bin/valkyrie && valkyrie run ./examples/list.md",
+        "compile": "bun build ./src/valkyrie.ts --compile --outfile ./bin/valkyrie && valkyrie run ./examples/simple.md",
         "out": "bun build ./src/valkyrie.ts --compile --outfile ./bin/valkyrie && sudo cp ./bin/valkyrie /usr/local/bin/"
     },
     "dependencies": {

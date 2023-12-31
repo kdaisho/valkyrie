@@ -1,14 +1,4 @@
-import {
-    Heading,
-    List,
-    ListItem,
-    OrderedList,
-    Paragraph,
-    Text,
-    Whiteline,
-} from '../types'
-
-type Node = Heading | List | OrderedList | Paragraph | Text | Whiteline
+import { List, ListItem, OrderedList, Node } from '../types'
 
 export default function traverse(ast: Node[]) {
     const output: Node[] = []
@@ -59,13 +49,6 @@ export default function traverse(ast: Node[]) {
             if (_node) {
                 olStack.push(_node)
             }
-        } else if (node.type === 'Paragraph') {
-            const lastItem = stack[stack.length - 1]
-            if (lastItem?.type === 'Paragraph') {
-                lastItem.children.push(...node.children)
-            } else {
-                output.push(node)
-            }
         } else {
             output.push(node)
         }
@@ -73,7 +56,7 @@ export default function traverse(ast: Node[]) {
         stack.push(node)
     })
 
-    console.log('==> trvse', output)
+    console.log('==> traverse', output)
 
     return output
 }
