@@ -19,7 +19,7 @@ export default function traverse(ast: Node[]) {
             }
 
             console.log('==>', 100, _node)
-            console.log('==>', 100.5, liStack)
+            console.log('==>', 100.5, JSON.stringify(liStack, null, 2))
 
             console.log('==> output', output)
 
@@ -66,9 +66,12 @@ export default function traverse(ast: Node[]) {
                     console.log('==>', 203, output)
                     // output.push(_node)
 
-                    // liStack[liStack.length - 1].children.push(_node)
+                    liStack[liStack.length - 1].children.push(_node)
                     // liStack.push(_node)
-                    liItemStack[liItemStack.length - 1].children.push(_node)
+
+                    // might need this
+                    // liItemStack[liItemStack.length - 1].children.push(_node)
+
                     console.log('==>', 2021, liStack)
 
                     // if (
@@ -142,7 +145,7 @@ export default function traverse(ast: Node[]) {
         stack.push(node)
     })
 
-    console.log('==> traverse', output)
+    console.log('==> traverse', JSON.stringify(output, null, 2))
 
     return output
 }
