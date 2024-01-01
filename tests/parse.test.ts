@@ -12,14 +12,14 @@ describe('parse', () => {
     it('should parse a heading', () => {
         input = [
             [
-                { type: 'Heading', value: '#' },
+                { type: 'Heading', symbol: '#' },
                 { type: 'Text', value: 'This is a test.' },
             ],
         ]
         const result = [
             {
                 type: 'Heading',
-                value: '#',
+                symbol: '#',
                 children: [{ type: 'Text', value: 'This is a test.' }],
             },
         ]
@@ -30,7 +30,7 @@ describe('parse', () => {
     it('should parse a heading with a link', () => {
         input = [
             [
-                { type: 'Heading', value: '#' },
+                { type: 'Heading', symbol: '#' },
                 { type: 'Text', value: 'The link: ' },
                 {
                     type: 'Anchor',
@@ -42,7 +42,7 @@ describe('parse', () => {
         const result = [
             {
                 type: 'Heading',
-                value: '#',
+                symbol: '#',
                 children: [
                     { type: 'Text', value: 'The link: ' },
                     {
@@ -103,18 +103,18 @@ describe('parse', () => {
     it('should parse a list', () => {
         input = [
             [
-                { type: 'List', value: '-', depth: 0 },
+                { type: 'List', symbol: '-', depth: 0 },
                 { type: 'Text', value: 'One' },
             ],
             [
-                { type: 'List', value: '-', depth: 2 },
+                { type: 'List', symbol: '-', depth: 2 },
                 { type: 'Text', value: 'Two' },
             ],
         ]
         const result = [
             {
                 type: 'List',
-                value: '-',
+                symbol: '-',
                 depth: 0,
                 children: [
                     {
@@ -125,7 +125,7 @@ describe('parse', () => {
             },
             {
                 type: 'List',
-                value: '-',
+                symbol: '-',
                 depth: 2,
                 children: [
                     {
@@ -142,14 +142,14 @@ describe('parse', () => {
     it('should parse an ordered list', () => {
         input = [
             [
-                { type: 'List', value: '1', depth: 0 },
+                { type: 'List', symbol: '1', depth: 0 },
                 { type: 'Text', value: 'This is a test.' },
             ],
         ]
         const result = [
             {
                 type: 'List',
-                value: '1',
+                symbol: '1',
                 depth: 0,
                 children: [
                     {

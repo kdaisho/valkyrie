@@ -23,15 +23,15 @@ export function buildListHtml(nodes: (List | ListItem)[]) {
     let html = ''
 
     nodes.forEach(n => {
-        if (n.type === 'List' && n.value === '-') {
+        if (n.type === 'List' && n.symbol === '-') {
             html += '<ul>' + buildListHtml(n.children) + '</ul>'
             return
         }
 
-        if (n.type === 'List' && n.value !== '-') {
+        if (n.type === 'List' && n.symbol !== '-') {
             html +=
                 '<ol start="' +
-                n.value +
+                n.symbol +
                 '">' +
                 buildListHtml(n.children) +
                 '</ol>'
@@ -52,14 +52,14 @@ export function buildListHtml(nodes: (List | ListItem)[]) {
                     '</a>'
             }
 
-            if (_.type === 'List' && _.value === '-') {
+            if (_.type === 'List' && _.symbol === '-') {
                 html += '<ul>' + buildListHtml(_.children) + '</ul>'
             }
 
-            if (_.type === 'List' && _.value !== '-') {
+            if (_.type === 'List' && _.symbol !== '-') {
                 html +=
                     '<ol start="' +
-                    _.value +
+                    _.symbol +
                     '">' +
                     buildListHtml(_.children) +
                     '</ol>'

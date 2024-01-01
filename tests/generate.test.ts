@@ -8,7 +8,7 @@ describe('generate', () => {
         input = [
             {
                 type: 'Heading',
-                value: '#',
+                symbol: '#',
                 children: [
                     {
                         type: 'Text',
@@ -41,7 +41,7 @@ describe('generate', () => {
         input = [
             {
                 type: 'List',
-                value: '-',
+                symbol: '-',
                 depth: 0,
                 children: [
                     {
@@ -75,7 +75,7 @@ describe('generate', () => {
         input = [
             {
                 type: 'List',
-                value: '-',
+                symbol: '-',
                 depth: 0,
                 children: [
                     {
@@ -89,7 +89,7 @@ describe('generate', () => {
                     },
                     {
                         type: 'List',
-                        value: '-',
+                        symbol: '-',
                         depth: 2,
                         children: [
                             {
@@ -116,7 +116,7 @@ describe('generate', () => {
         input = [
             {
                 type: 'List',
-                value: '10',
+                symbol: '10',
                 depth: 0,
                 children: [
                     {
@@ -202,7 +202,7 @@ describe('generate', () => {
         input = [
             {
                 type: 'List',
-                value: '-',
+                symbol: '-',
                 depth: 0,
                 children: [
                     {

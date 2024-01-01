@@ -8,7 +8,7 @@ describe('traverse', () => {
         input = [
             {
                 type: 'List',
-                value: '-',
+                symbol: '-',
                 depth: 0,
                 children: [
                     {
@@ -24,7 +24,7 @@ describe('traverse', () => {
             },
             {
                 type: 'List',
-                value: '-',
+                symbol: '-',
                 depth: 2,
                 children: [
                     {
@@ -43,7 +43,7 @@ describe('traverse', () => {
         const result = [
             {
                 type: 'List',
-                value: '-',
+                symbol: '-',
                 depth: 0,
                 children: [
                     {
@@ -57,7 +57,7 @@ describe('traverse', () => {
                     },
                     {
                         type: 'List',
-                        value: '-',
+                        symbol: '-',
                         depth: 2,
                         children: [
                             {
@@ -82,7 +82,7 @@ describe('traverse', () => {
         input = [
             {
                 type: 'List',
-                value: '1',
+                symbol: '1',
                 depth: 0,
                 children: [
                     {
@@ -98,7 +98,7 @@ describe('traverse', () => {
             },
             {
                 type: 'List',
-                value: '2',
+                symbol: '2',
                 depth: 0,
                 children: [
                     {
@@ -117,7 +117,7 @@ describe('traverse', () => {
         const result = [
             {
                 type: 'List',
-                value: '1',
+                symbol: '1',
                 depth: 0,
                 children: [
                     {

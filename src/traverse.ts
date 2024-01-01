@@ -19,15 +19,15 @@ export default function traverse(ast: Node[]) {
 
         const parent = stack[stack.length - 1]
 
-        if (node.type === 'List' && node.value === '-') {
+        if (node.type === 'List' && node.symbol === '-') {
             if (parent?.type === 'List') {
                 if (parent.depth === _node.depth) {
-                    if (parent.type === 'List' && parent.value === '-') {
+                    if (parent.type === 'List' && parent.symbol === '-') {
                         parent.children.push(..._node.children)
                     } else {
                         if (
                             (liItemStack[liItemStack.length - 1] as List)
-                                .value !== '-' &&
+                                .symbol !== '-' &&
                             (liItemStack[liItemStack.length - 1] as List)
                                 .depth > _node.depth
                         ) {
@@ -44,7 +44,7 @@ export default function traverse(ast: Node[]) {
             } else {
                 output.push(_node)
             }
-        } else if (node.type === 'List' && node.value !== '-') {
+        } else if (node.type === 'List' && node.symbol !== '-') {
             if (parent?.type === 'List') {
                 if (parent.depth === _node.depth) {
                     parent.children.push(..._node.children)

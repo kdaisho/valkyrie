@@ -56,7 +56,7 @@ export default function (input: string) {
 
             tokens.push({
                 type: 'List',
-                value: symbol,
+                symbol,
                 depth,
             })
 
@@ -83,7 +83,7 @@ export default function (input: string) {
             if (isList) {
                 tokens.push({
                     type: 'List',
-                    value: symbol,
+                    symbol,
                     depth,
                 })
             } else {
@@ -137,7 +137,7 @@ export default function (input: string) {
                 pop(chars)
                 tokens.push({
                     type: 'Heading',
-                    value: symbol,
+                    symbol,
                 })
 
                 continue

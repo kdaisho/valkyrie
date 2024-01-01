@@ -1,6 +1,6 @@
 export type Heading = {
     type: 'Heading'
-    value: string
+    symbol: string
     children: Text[]
 }
 
@@ -16,7 +16,7 @@ export type Text = {
 
 export type List = {
     type: 'List'
-    value: string
+    symbol: string
     depth: number
     children: (List | ListItem)[]
 }
@@ -55,11 +55,11 @@ export type Node =
 export type Token =
     | {
           type: 'Heading'
-          value: string
+          symbol: string
       }
     | {
           type: 'List'
-          value: string
+          symbol: string
           depth: number
       }
     | {
