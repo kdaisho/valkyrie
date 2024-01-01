@@ -257,7 +257,7 @@ export default function (input: string) {
         tokens = []
     }
 
-    console.log('==> lexer', LexicalRepresentation)
+    // console.log('==> lexer', LexicalRepresentation)
 
     return LexicalRepresentation
 }
