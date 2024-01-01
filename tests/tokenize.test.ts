@@ -53,7 +53,7 @@ describe('tokenize', () => {
         const input = '1. example text'
         const result = [
             [
-                { type: 'OrderedList', value: '1', depth: 0 },
+                { type: 'List', value: '1', depth: 0 },
                 { type: 'Text', value: 'example text' },
             ],
         ]

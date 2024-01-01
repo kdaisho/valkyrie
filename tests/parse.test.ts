@@ -142,13 +142,13 @@ describe('parse', () => {
     it('should parse an ordered list', () => {
         input = [
             [
-                { type: 'OrderedList', value: '1', depth: 0 },
+                { type: 'List', value: '1', depth: 0 },
                 { type: 'Text', value: 'This is a test.' },
             ],
         ]
         const result = [
             {
-                type: 'OrderedList',
+                type: 'List',
                 value: '1',
                 depth: 0,
                 children: [

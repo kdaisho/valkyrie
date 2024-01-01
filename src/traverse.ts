@@ -1,8 +1,8 @@
-import { List, ListItem, OrderedList, Node } from '../types'
+import { List, ListItem, Node } from '../types'
 
 export default function traverse(ast: Node[]) {
     const output: Node[] = []
-    const liItemStack: (List | OrderedList | ListItem)[] = []
+    const liItemStack: (List | ListItem)[] = []
     const stack: Node[] = []
 
     ast.forEach(node => {
@@ -10,35 +10,26 @@ export default function traverse(ast: Node[]) {
 
         if (_node === null) return
 
-        console.log('==>', 10, _node)
-        console.log('==>', 11, stack)
-
         while (
-            (stack[stack.length - 1]?.type === 'List' ||
-                stack[stack.length - 1]?.type === 'OrderedList') &&
-            (stack[stack.length - 1] as List | OrderedList).depth > _node.depth
+            stack[stack.length - 1]?.type === 'List' &&
+            (stack[stack.length - 1] as List).depth > _node.depth
         ) {
             stack.pop()
         }
 
         const parent = stack[stack.length - 1]
 
-        if (node.type === 'List') {
-            if (parent?.type === 'List' || parent?.type === 'OrderedList') {
+        if (node.type === 'List' && node.value === '-') {
+            if (parent?.type === 'List') {
                 if (parent.depth === _node.depth) {
-                    if (parent.type === 'List') {
+                    if (parent.type === 'List' && parent.value === '-') {
                         parent.children.push(..._node.children)
                     } else {
                         if (
-                            liItemStack[liItemStack.length - 1].type ===
-                                'List' ||
-                            (liItemStack[liItemStack.length - 1].type ===
-                                'OrderedList' &&
-                                (
-                                    liItemStack[liItemStack.length - 1] as
-                                        | List
-                                        | OrderedList
-                                ).depth > _node.depth)
+                            (liItemStack[liItemStack.length - 1] as List)
+                                .value !== '-' &&
+                            (liItemStack[liItemStack.length - 1] as List)
+                                .depth > _node.depth
                         ) {
                             stack.push(_node)
                             output.push(_node)
@@ -53,10 +44,8 @@ export default function traverse(ast: Node[]) {
             } else {
                 output.push(_node)
             }
-        } else if (node.type === 'OrderedList') {
-            if (parent?.type === 'OrderedList' || parent?.type === 'List') {
-                console.log('==>', 100, stack)
-
+        } else if (node.type === 'List' && node.value !== '-') {
+            if (parent?.type === 'List') {
                 if (parent.depth === _node.depth) {
                     parent.children.push(..._node.children)
                     _node = null

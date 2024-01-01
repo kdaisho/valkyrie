@@ -18,19 +18,12 @@ export type List = {
     type: 'List'
     value: string
     depth: number
-    children: (List | OrderedList | ListItem)[]
-}
-
-export type OrderedList = {
-    type: 'OrderedList'
-    value: string
-    depth: number
-    children: (List | OrderedList | ListItem)[]
+    children: (List | ListItem)[]
 }
 
 export type ListItem = {
     type: 'ListItem'
-    children: (List | OrderedList | Anchor | Text)[]
+    children: (List | Anchor | Text)[]
 }
 
 export type Whiteline = {
@@ -48,13 +41,12 @@ export type Anchor = {
     text?: string
 }
 
-export type AST = (Heading | List | OrderedList | Anchor | Paragraph | Text)[]
+export type AST = (Heading | List | Anchor | Paragraph | Text)[]
 
 export type Node =
     | Heading
     | List
     | ListItem
-    | OrderedList
     | Anchor
     | Paragraph
     | Text
@@ -67,11 +59,6 @@ export type Token =
       }
     | {
           type: 'List'
-          value: string
-          depth: number
-      }
-    | {
-          type: 'OrderedList'
           value: string
           depth: number
       }

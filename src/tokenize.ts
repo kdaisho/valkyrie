@@ -82,7 +82,7 @@ export default function (input: string) {
 
             if (isList) {
                 tokens.push({
-                    type: 'OrderedList',
+                    type: 'List',
                     value: symbol,
                     depth,
                 })

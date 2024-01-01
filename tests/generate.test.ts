@@ -115,8 +115,9 @@ describe('generate', () => {
     it('should generate flat <ol>', () => {
         input = [
             {
-                type: 'OrderedList',
+                type: 'List',
                 value: '10',
+                depth: 0,
                 children: [
                     {
                         type: 'ListItem',
