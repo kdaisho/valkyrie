@@ -56,7 +56,7 @@ export default function (input: string) {
 
             tokens.push({
                 type: 'List',
-                value: symbol,
+                symbol,
                 depth,
             })
 
@@ -82,8 +82,8 @@ export default function (input: string) {
 
             if (isList) {
                 tokens.push({
-                    type: 'OrderedList',
-                    value: symbol,
+                    type: 'List',
+                    symbol,
                     depth,
                 })
             } else {
@@ -137,7 +137,7 @@ export default function (input: string) {
                 pop(chars)
                 tokens.push({
                     type: 'Heading',
-                    value: symbol,
+                    symbol,
                 })
 
                 continue
@@ -257,7 +257,7 @@ export default function (input: string) {
         tokens = []
     }
 
-    console.log('==> lexer', LexicalRepresentation)
+    // console.log('==> lexer', LexicalRepresentation)
 
     return LexicalRepresentation
 }

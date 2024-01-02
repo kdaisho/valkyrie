@@ -1,93 +1,47 @@
-import { List, ListItem, OrderedList, Node } from '../types'
+import { List, ListItem, Node } from '../types'
 
 export default function traverse(ast: Node[]) {
     const output: Node[] = []
-    const liStack: (List | OrderedList)[] = []
-    const liItemStack: (List | OrderedList | ListItem)[] = []
+    const liItemStack: (List | ListItem)[] = []
     const stack: Node[] = []
 
     ast.forEach(node => {
-        if (node.type === 'List') {
-            let _node = node as List | null
+        let _node = node as List | null
 
-            if (_node === null) return
+        if (_node === null) return
 
-            while (liStack[liStack.length - 1]?.depth > _node.depth) {
-                liStack.pop()
-            }
+        while (
+            stack[stack.length - 1]?.type === 'List' &&
+            (stack[stack.length - 1] as List).depth > _node.depth
+        ) {
+            stack.pop()
+        }
 
-            if (
-                stack[stack.length - 1]?.type === 'List' ||
-                stack[stack.length - 1]?.type === 'OrderedList'
-            ) {
-                const parent = liStack[liStack.length - 1]
+        const parent = stack[stack.length - 1]
 
-                if (parent.depth === _node.depth) {
-                    if (parent.type === 'List') {
-                        parent.children.push(..._node.children)
-                    } else {
-                        if (
-                            liItemStack[liItemStack.length - 1].type ===
-                                'List' ||
-                            (liItemStack[liItemStack.length - 1].type ===
-                                'OrderedList' &&
-                                (
-                                    liItemStack[liItemStack.length - 1] as
-                                        | List
-                                        | OrderedList
-                                ).depth > _node.depth)
-                        ) {
-                            liStack.push(_node)
-                            output.push(_node)
-                        } else {
-                            parent.children.push(..._node.children)
-                        }
-                    }
-                    _node = null
-                } else {
-                    liStack[liStack.length - 1].children.push(_node)
-                }
+        if (node.type === 'List' && parent?.type === 'List') {
+            if (parent.depth !== _node.depth) {
+                parent.children.push(_node)
             } else {
-                output.push(_node)
-            }
+                const listItem = liItemStack[liItemStack.length - 1] as List
 
-            if (_node) {
-                liItemStack.push(..._node.children)
-                liStack.push(_node)
-            }
-        } else if (node.type === 'OrderedList') {
-            let _node = node as OrderedList | null
-
-            if (_node === null) return
-
-            while (liStack[liStack.length - 1]?.depth > _node.depth) {
-                liStack.pop()
-            }
-
-            if (
-                stack[stack.length - 1]?.type === 'OrderedList' ||
-                stack[stack.length - 1]?.type === 'List'
-            ) {
-                const parent = liStack[liStack.length - 1]
-                if (parent.depth === _node.depth) {
-                    liStack[liStack.length - 1].children.push(..._node.children)
-                    _node = null
+                // TODO: treat both Lists the same way by removing the check for symbol -> if (listItem.depth > _node.depth)
+                if (listItem.symbol !== '-' && listItem.depth > _node.depth) {
+                    stack.push(_node)
+                    output.push(_node)
                 } else {
-                    liStack[liStack.length - 1].children.push(_node)
+                    parent.children.push(..._node.children)
                 }
-            } else {
-                output.push(_node)
-            }
-
-            if (_node) {
-                liItemStack.push(_node)
-                liStack.push(_node)
+                _node = null
             }
         } else {
             output.push(node)
         }
 
-        stack.push(node)
+        if (_node) {
+            stack.push(_node)
+            liItemStack.push(_node)
+        }
     })
 
     console.log('==> traverse', output)

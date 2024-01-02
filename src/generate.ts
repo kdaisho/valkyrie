@@ -15,17 +15,17 @@ function generate(ast: AST) {
 
     while (ast.length) {
         if (ast[0].type === 'Heading') {
-            const { value, children } = ast[0]
-            const openingTag = '<' + heading[value.length] + '>'
+            const { symbol, children } = ast[0]
+            const openingTag = '<' + heading[symbol.length] + '>'
             const text = children[0].value
-            const closingTag = '</' + heading[value.length] + '>'
+            const closingTag = '</' + heading[symbol.length] + '>'
             html += openingTag + text + closingTag
             ast.shift()
 
             continue
         }
 
-        if (ast[0].type === 'List') {
+        if (ast[0].type === 'List' && ast[0].symbol === '-') {
             const { children } = ast[0]
             html += '<ul>' + buildListHtml(children) + '</ul>'
             ast.shift()
@@ -33,10 +33,14 @@ function generate(ast: AST) {
             continue
         }
 
-        if (ast[0].type === 'OrderedList') {
-            const { value, children } = ast[0]
+        if (ast[0].type === 'List' && ast[0].symbol !== '-') {
+            const { symbol, children } = ast[0]
             html +=
-                '<ol start="' + value + '">' + buildListHtml(children) + '</ol>'
+                '<ol start="' +
+                symbol +
+                '">' +
+                buildListHtml(children) +
+                '</ol>'
             ast.shift()
 
             continue

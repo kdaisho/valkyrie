@@ -8,7 +8,7 @@ describe('traverse', () => {
         input = [
             {
                 type: 'List',
-                value: '-',
+                symbol: '-',
                 depth: 0,
                 children: [
                     {
@@ -24,7 +24,7 @@ describe('traverse', () => {
             },
             {
                 type: 'List',
-                value: '-',
+                symbol: '-',
                 depth: 2,
                 children: [
                     {
@@ -43,7 +43,7 @@ describe('traverse', () => {
         const result = [
             {
                 type: 'List',
-                value: '-',
+                symbol: '-',
                 depth: 0,
                 children: [
                     {
@@ -57,7 +57,7 @@ describe('traverse', () => {
                     },
                     {
                         type: 'List',
-                        value: '-',
+                        symbol: '-',
                         depth: 2,
                         children: [
                             {
@@ -81,8 +81,9 @@ describe('traverse', () => {
     it('should return a flat ordered list', () => {
         input = [
             {
-                type: 'OrderedList',
-                value: '1',
+                type: 'List',
+                symbol: '1',
+                depth: 0,
                 children: [
                     {
                         type: 'ListItem',
@@ -96,8 +97,9 @@ describe('traverse', () => {
                 ],
             },
             {
-                type: 'OrderedList',
-                value: '2',
+                type: 'List',
+                symbol: '2',
+                depth: 0,
                 children: [
                     {
                         type: 'ListItem',
@@ -114,8 +116,9 @@ describe('traverse', () => {
 
         const result = [
             {
-                type: 'OrderedList',
-                value: '1',
+                type: 'List',
+                symbol: '1',
+                depth: 0,
                 children: [
                     {
                         type: 'ListItem',

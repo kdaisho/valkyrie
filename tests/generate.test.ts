@@ -8,7 +8,7 @@ describe('generate', () => {
         input = [
             {
                 type: 'Heading',
-                value: '#',
+                symbol: '#',
                 children: [
                     {
                         type: 'Text',
@@ -37,11 +37,12 @@ describe('generate', () => {
         expect(generate(input)).toBe('<p>Sample text</p>')
     })
 
+    // Fails
     it('should generate flat <ul>', () => {
         input = [
             {
                 type: 'List',
-                value: '-',
+                symbol: '-',
                 depth: 0,
                 children: [
                     {
@@ -75,7 +76,7 @@ describe('generate', () => {
         input = [
             {
                 type: 'List',
-                value: '-',
+                symbol: '-',
                 depth: 0,
                 children: [
                     {
@@ -89,7 +90,7 @@ describe('generate', () => {
                     },
                     {
                         type: 'List',
-                        value: '-',
+                        symbol: '-',
                         depth: 2,
                         children: [
                             {
@@ -115,8 +116,9 @@ describe('generate', () => {
     it('should generate flat <ol>', () => {
         input = [
             {
-                type: 'OrderedList',
-                value: '10',
+                type: 'List',
+                symbol: '10',
+                depth: 0,
                 children: [
                     {
                         type: 'ListItem',
@@ -201,7 +203,7 @@ describe('generate', () => {
         input = [
             {
                 type: 'List',
-                value: '-',
+                symbol: '-',
                 depth: 0,
                 children: [
                     {

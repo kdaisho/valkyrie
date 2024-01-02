@@ -1,7 +1,6 @@
 import {
     Heading,
     List,
-    OrderedList,
     Anchor,
     Paragraph,
     Text,
@@ -21,7 +20,7 @@ function parse(nodes: Token[][]) {
         if (first.type === 'Heading') {
             const _ = element as Heading
             _.type = 'Heading'
-            _.value = first.value
+            _.symbol = first.symbol
             _.children = rest as Text[]
             element = _
         }
@@ -29,20 +28,7 @@ function parse(nodes: Token[][]) {
         if (first.type === 'List') {
             const _ = element as List
             _.type = 'List'
-            _.value = first.value
-            _.depth = first.depth
-            const listItem: ListItem = {
-                type: 'ListItem',
-                children: rest as (List | Anchor | Text)[],
-            }
-            _.children = [listItem]
-            element = _
-        }
-
-        if (first.type === 'OrderedList') {
-            const _ = element as OrderedList
-            _.type = 'OrderedList'
-            _.value = first.value
+            _.symbol = first.symbol
             _.depth = first.depth
             const listItem: ListItem = {
                 type: 'ListItem',

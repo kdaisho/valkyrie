@@ -1,6 +1,6 @@
 export type Heading = {
     type: 'Heading'
-    value: string
+    symbol: string
     children: Text[]
 }
 
@@ -16,21 +16,14 @@ export type Text = {
 
 export type List = {
     type: 'List'
-    value: string
+    symbol: string
     depth: number
-    children: (List | OrderedList | ListItem)[]
-}
-
-export type OrderedList = {
-    type: 'OrderedList'
-    value: string
-    depth: number
-    children: (List | OrderedList | ListItem)[]
+    children: (List | ListItem)[]
 }
 
 export type ListItem = {
     type: 'ListItem'
-    children: (List | OrderedList | Anchor | Text)[]
+    children: (List | Anchor | Text)[]
 }
 
 export type Whiteline = {
@@ -48,13 +41,12 @@ export type Anchor = {
     text?: string
 }
 
-export type AST = (Heading | List | OrderedList | Anchor | Paragraph | Text)[]
+export type AST = (Heading | List | Anchor | Paragraph | Text)[]
 
 export type Node =
     | Heading
     | List
     | ListItem
-    | OrderedList
     | Anchor
     | Paragraph
     | Text
@@ -63,16 +55,11 @@ export type Node =
 export type Token =
     | {
           type: 'Heading'
-          value: string
+          symbol: string
       }
     | {
           type: 'List'
-          value: string
-          depth: number
-      }
-    | {
-          type: 'OrderedList'
-          value: string
+          symbol: string
           depth: number
       }
     | {

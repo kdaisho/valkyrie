@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { List, ListItem, OrderedList } from '../types'
+import { List, ListItem } from '../types'
 
 export const pipe =
     (...fns: ((v: any) => any)[]) =>
@@ -19,19 +19,19 @@ export const getTextBody = (value: string) => {
         .replace(/\s{2,}/g, ' ')
 }
 
-export function buildListHtml(nodes: (List | OrderedList | ListItem)[]) {
+export function buildListHtml(nodes: (List | ListItem)[]) {
     let html = ''
 
     nodes.forEach(n => {
-        if (n.type === 'List') {
+        if (n.type === 'List' && n.symbol === '-') {
             html += '<ul>' + buildListHtml(n.children) + '</ul>'
             return
         }
 
-        if (n.type === 'OrderedList') {
+        if (n.type === 'List' && n.symbol !== '-') {
             html +=
                 '<ol start="' +
-                n.value +
+                n.symbol +
                 '">' +
                 buildListHtml(n.children) +
                 '</ol>'
@@ -52,18 +52,22 @@ export function buildListHtml(nodes: (List | OrderedList | ListItem)[]) {
                     '</a>'
             }
 
-            if (_.type === 'List') {
-                html += '<ul>' + buildListHtml(_.children) + '</ul>'
-            }
+            // if (_.type === 'List' && _.symbol === '-') {
+            //     // lol never gets here
+            //     console.log('==>', '======================== 1')
+            //     html += '<ul>' + buildListHtml(_.children) + '</ul>'
+            // }
 
-            if (_.type === 'OrderedList') {
-                html +=
-                    '<ol start="' +
-                    _.value +
-                    '">' +
-                    buildListHtml(_.children) +
-                    '</ol>'
-            }
+            // if (_.type === 'List' && _.symbol !== '-') {
+            //     // lol never gets here
+            //     console.log('==>', '======================== 2')
+            //     html +=
+            //         '<ol start="' +
+            //         _.symbol +
+            //         '">' +
+            //         buildListHtml(_.children) +
+            //         '</ol>'
+            // }
         })
 
         html += '</li>'

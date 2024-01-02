@@ -92,6 +92,19 @@ describe('parse-and-generate', () => {
         )
     })
 
+    // new
+    // it('should return a nested <ul>', () => {
+    //     input = `
+    //         - List item
+    //             - Nested item
+    //     `
+
+    //     expect(parseAndGenerate(input)).toBe(
+    //         '<ul><li>List item<ul><li>Nested item</li></ul></li></ul>'
+    //     )
+    // })
+
+    // Fails
     it('should return a nested and un-nested <ul>', () => {
         input = `
             - List item
@@ -103,6 +116,10 @@ describe('parse-and-generate', () => {
         expect(parseAndGenerate(input)).toBe(
             '<ul><li>List item</li><ul><li>Nested item</li><ul><li>Another nested item</li></ul></ul><li>First level item</li></ul>'
         )
+
+        // expect(parseAndGenerate(input)).toBe(
+        //     '<ul><li>List item<ul><li>Nested item<ul><li>Another nested item</li></ul></li></ul></li><li>First level item</li></ul>'
+        // )
     })
 
     it('should return a set of flat <ol> and <ul> (<ol> does not have concept of nesting)', () => {
@@ -180,6 +197,7 @@ describe('parse-and-generate', () => {
         )
     })
 
+    // Fails
     it('should return a complex list that allows different list type for different depth', () => {
         input = `
             1. One3
@@ -193,6 +211,7 @@ describe('parse-and-generate', () => {
         )
     })
 
+    // Fails
     it('should return a complex list with a simple nest cancelation', () => {
         input = `
             - One4

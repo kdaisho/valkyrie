@@ -23,7 +23,7 @@ describe('tokenize', () => {
         const input = '# This is a test.'
         const result = [
             [
-                { type: 'Heading', value: '#' },
+                { type: 'Heading', symbol: '#' },
                 { type: 'Text', value: 'This is a test.' },
             ],
         ]
@@ -53,7 +53,7 @@ describe('tokenize', () => {
         const input = '1. example text'
         const result = [
             [
-                { type: 'OrderedList', value: '1', depth: 0 },
+                { type: 'List', symbol: '1', depth: 0 },
                 { type: 'Text', value: 'example text' },
             ],
         ]
@@ -79,7 +79,7 @@ describe('tokenize', () => {
         const input = '- example text'
         const result = [
             [
-                { type: 'List', value: '-', depth: 0 },
+                { type: 'List', symbol: '-', depth: 0 },
                 { type: 'Text', value: 'example text' },
             ],
         ]
