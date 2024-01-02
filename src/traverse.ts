@@ -19,41 +19,20 @@ export default function traverse(ast: Node[]) {
 
         const parent = stack[stack.length - 1]
 
-        if (node.type === 'List' && node.symbol === '-') {
-            if (parent?.type === 'List') {
-                if (parent.depth === _node.depth) {
-                    if (parent.type === 'List' && parent.symbol === '-') {
-                        parent.children.push(..._node.children)
-                    } else {
-                        if (
-                            (liItemStack[liItemStack.length - 1] as List)
-                                .symbol !== '-' &&
-                            (liItemStack[liItemStack.length - 1] as List)
-                                .depth > _node.depth
-                        ) {
-                            stack.push(_node)
-                            output.push(_node)
-                        } else {
-                            parent.children.push(..._node.children)
-                        }
-                    }
-                    _node = null
-                } else {
-                    parent.children.push(_node)
-                }
+        if (node.type === 'List' && parent?.type === 'List') {
+            if (parent.depth !== _node.depth) {
+                parent.children.push(_node)
             } else {
-                output.push(_node)
-            }
-        } else if (node.type === 'List' && node.symbol !== '-') {
-            if (parent?.type === 'List') {
-                if (parent.depth === _node.depth) {
+                const listItem = liItemStack[liItemStack.length - 1] as List
+
+                // TODO: treat both Lists the same way by removing the check for symbol -> if (listItem.depth > _node.depth)
+                if (listItem.symbol !== '-' && listItem.depth > _node.depth) {
+                    stack.push(_node)
+                    output.push(_node)
+                } else {
                     parent.children.push(..._node.children)
-                    _node = null
-                } else {
-                    parent.children.push(_node)
                 }
-            } else {
-                output.push(_node)
+                _node = null
             }
         } else {
             output.push(node)

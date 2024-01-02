@@ -52,18 +52,22 @@ export function buildListHtml(nodes: (List | ListItem)[]) {
                     '</a>'
             }
 
-            if (_.type === 'List' && _.symbol === '-') {
-                html += '<ul>' + buildListHtml(_.children) + '</ul>'
-            }
+            // if (_.type === 'List' && _.symbol === '-') {
+            //     // lol never gets here
+            //     console.log('==>', '======================== 1')
+            //     html += '<ul>' + buildListHtml(_.children) + '</ul>'
+            // }
 
-            if (_.type === 'List' && _.symbol !== '-') {
-                html +=
-                    '<ol start="' +
-                    _.symbol +
-                    '">' +
-                    buildListHtml(_.children) +
-                    '</ol>'
-            }
+            // if (_.type === 'List' && _.symbol !== '-') {
+            //     // lol never gets here
+            //     console.log('==>', '======================== 2')
+            //     html +=
+            //         '<ol start="' +
+            //         _.symbol +
+            //         '">' +
+            //         buildListHtml(_.children) +
+            //         '</ol>'
+            // }
         })
 
         html += '</li>'

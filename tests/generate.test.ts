@@ -37,6 +37,7 @@ describe('generate', () => {
         expect(generate(input)).toBe('<p>Sample text</p>')
     })
 
+    // Fails
     it('should generate flat <ul>', () => {
         input = [
             {
