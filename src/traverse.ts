@@ -22,8 +22,7 @@ export default function traverse(ast: Node[]) {
             } else {
                 const listItem = liItemStack.at(-1) as List
 
-                // TODO: treat both Lists the same way by removing the check for symbol -> if (listItem.depth > _node.depth)
-                if (listItem.symbol !== '-' && listItem.depth > _node.depth) {
+                if (listItem.depth > _node.depth) {
                     stack.push(_node)
                     output.push(_node)
                 } else {
