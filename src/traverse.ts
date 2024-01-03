@@ -21,7 +21,7 @@ export default function traverse(ast: Node[]) {
 
         if (node.type === 'List' && parent?.type === 'List') {
             if (parent.depth !== _node.depth) {
-                parent.children.push(_node)
+                liItemStack.at(-1)?.children.push(_node)
             } else {
                 const listItem = liItemStack[liItemStack.length - 1] as List
 
@@ -40,11 +40,14 @@ export default function traverse(ast: Node[]) {
 
         if (_node) {
             stack.push(_node)
-            liItemStack.push(_node)
+
+            if (_node.type === 'List') {
+                liItemStack.push(..._node.children)
+            }
         }
     })
 
-    console.log('==> traverse', output)
+    console.log('==> traverse', JSON.stringify(output, null, 2))
 
     return output
 }

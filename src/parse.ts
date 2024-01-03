@@ -52,6 +52,7 @@ function parse(nodes: Token[][]) {
         ast.push(element)
         counter++
     }
+
     console.log('==> AST', ast)
 
     return ast
