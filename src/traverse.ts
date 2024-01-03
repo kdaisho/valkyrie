@@ -10,20 +10,17 @@ export default function traverse(ast: Node[]) {
 
         if (_node === null) return
 
-        while (
-            stack[stack.length - 1]?.type === 'List' &&
-            (stack[stack.length - 1] as List).depth > _node.depth
-        ) {
+        while ((stack.at(-1) as List)?.depth > _node.depth) {
             stack.pop()
         }
 
-        const parent = stack[stack.length - 1]
+        const parent = stack.at(-1)
 
         if (node.type === 'List' && parent?.type === 'List') {
             if (parent.depth !== _node.depth) {
-                liItemStack.at(-1)?.children.push(_node)
+                parent.children.at(-1)?.children.push(_node)
             } else {
-                const listItem = liItemStack[liItemStack.length - 1] as List
+                const listItem = liItemStack.at(-1) as List
 
                 // TODO: treat both Lists the same way by removing the check for symbol -> if (listItem.depth > _node.depth)
                 if (listItem.symbol !== '-' && listItem.depth > _node.depth) {
