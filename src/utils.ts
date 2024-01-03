@@ -40,7 +40,7 @@ export function buildListHtml(nodes: (List | ListItem | Text | Anchor)[]) {
             }
 
             if (n.type === 'List') {
-                html += n.symbol === '-' ? '<ul>' : '<ol>'
+                html += n.symbol === '-' ? '<ul>' : `<ol start="${n.symbol}">`
                 html += buildListHtml(n.children)
                 html += n.symbol === '-' ? '</ul>' : '</ol>'
             }

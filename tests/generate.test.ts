@@ -37,7 +37,6 @@ describe('generate', () => {
         expect(generate(input)).toBe('<p>Sample text</p>')
     })
 
-    // Fails
     it('should generate flat <ul>', () => {
         input = [
             {
@@ -86,19 +85,19 @@ describe('generate', () => {
                                 type: 'Text',
                                 value: 'Item one',
                             },
-                        ],
-                    },
-                    {
-                        type: 'List',
-                        symbol: '-',
-                        depth: 2,
-                        children: [
                             {
-                                type: 'ListItem',
+                                type: 'List',
+                                symbol: '-',
+                                depth: 2,
                                 children: [
                                     {
-                                        type: 'Text',
-                                        value: 'Item two',
+                                        type: 'ListItem',
+                                        children: [
+                                            {
+                                                type: 'Text',
+                                                value: 'Item two',
+                                            },
+                                        ],
                                     },
                                 ],
                             },
@@ -109,7 +108,7 @@ describe('generate', () => {
         ]
 
         expect(generate(input)).toBe(
-            '<ul><li>Item one</li><ul><li>Item two</li></ul></ul>'
+            '<ul><li>Item one<ul><li>Item two</li></ul></li></ul>'
         )
     })
 

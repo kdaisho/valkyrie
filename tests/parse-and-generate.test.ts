@@ -88,23 +88,10 @@ describe('parse-and-generate', () => {
         `
 
         expect(parseAndGenerate(input)).toBe(
-            '<ul><li>List item</li><ul><li>Nested item</li></ul></ul>'
+            '<ul><li>List item<ul><li>Nested item</li></ul></li></ul>'
         )
     })
 
-    // new
-    // it('should return a nested <ul>', () => {
-    //     input = `
-    //         - List item
-    //             - Nested item
-    //     `
-
-    //     expect(parseAndGenerate(input)).toBe(
-    //         '<ul><li>List item<ul><li>Nested item</li></ul></li></ul>'
-    //     )
-    // })
-
-    // Fails
     it('should return a nested and un-nested <ul>', () => {
         input = `
             - List item
@@ -114,12 +101,8 @@ describe('parse-and-generate', () => {
         `
 
         expect(parseAndGenerate(input)).toBe(
-            '<ul><li>List item</li><ul><li>Nested item</li><ul><li>Another nested item</li></ul></ul><li>First level item</li></ul>'
+            '<ul><li>List item<ul><li>Nested item<ul><li>Another nested item</li></ul></li></ul></li><li>First level item</li></ul>'
         )
-
-        // expect(parseAndGenerate(input)).toBe(
-        //     '<ul><li>List item<ul><li>Nested item<ul><li>Another nested item</li></ul></li></ul></li><li>First level item</li></ul>'
-        // )
     })
 
     it('should return a set of flat <ol> and <ul> (<ol> does not have concept of nesting)', () => {
@@ -131,7 +114,7 @@ describe('parse-and-generate', () => {
         `
 
         expect(parseAndGenerate(input)).toBe(
-            '<ol start="1"><li>Ordered item</li><li>Another ordered item</li><ul><li>Unordered item</li><li>Another unordered item</li></ul></ol>'
+            '<ol start="1"><li>Ordered item</li><li>Another ordered item<ul><li>Unordered item</li><li>Another unordered item</li></ul></li></ol>'
         )
     })
 
@@ -144,7 +127,7 @@ describe('parse-and-generate', () => {
         `
 
         expect(parseAndGenerate(input)).toBe(
-            '<ul><li>First item</li><li>Second item</li><ol start="1"><li>Ordered item</li><li>Another ordered item</li></ol></ul>'
+            '<ul><li>First item</li><li>Second item<ol start="1"><li>Ordered item</li><li>Another ordered item</li></ol></li></ul>'
         )
     })
 
@@ -167,7 +150,7 @@ describe('parse-and-generate', () => {
         `
 
         expect(parseAndGenerate(input)).toBe(
-            '<ul><li>List item <a href="https://example.com">Example</a>, yes.</li><ul><li>Nested item => <a href="https://example.com">https://example.com</a>, eh?</li></ul></ul>'
+            '<ul><li>List item <a href="https://example.com">Example</a>, yes.<ul><li>Nested item => <a href="https://example.com">https://example.com</a>, eh?</li></ul></li></ul>'
         )
     })
 
@@ -180,7 +163,7 @@ describe('parse-and-generate', () => {
         `
 
         expect(parseAndGenerate(input)).toBe(
-            '<ol start="1"><li>One1</li><ol start="1"><li>Two</li></ol></ol><ul><li>Three</li><ol start="3"><li>Four</li></ol></ul>'
+            '<ol start="1"><li>One1<ol start="1"><li>Two</li></ol></li><li>Three<ol start="3"><li>Four</li></ol></li></ol>'
         )
     })
 
@@ -193,11 +176,10 @@ describe('parse-and-generate', () => {
         `
 
         expect(parseAndGenerate(input)).toBe(
-            '<ol start="1"><li>One2</li><ol start="1"><li>Two</li><li>Three</li><li>Four</li></ol></ol>'
+            '<ol start="1"><li>One2<ol start="1"><li>Two</li><li>Three</li><li>Four</li></ol></li></ol>'
         )
     })
 
-    // Fails
     it('should return a complex list that allows different list type for different depth', () => {
         input = `
             1. One3
@@ -207,11 +189,10 @@ describe('parse-and-generate', () => {
         `
 
         expect(parseAndGenerate(input)).toBe(
-            '<ol start="1"><li>One3</li><ol start="1"><li>Two</li><ul><li>Three</li></ul><li>Four</li></ol></ol>'
+            '<ol start="1"><li>One3<ol start="1"><li>Two<ul><li>Three</li></ul></li><li>Four</li></ol></li></ol>'
         )
     })
 
-    // Fails
     it('should return a complex list with a simple nest cancelation', () => {
         input = `
             - One4
@@ -222,7 +203,7 @@ describe('parse-and-generate', () => {
         `
 
         expect(parseAndGenerate(input)).toBe(
-            '<ul><li>One4</li><ul><li>Two</li><li>Three</li><ul><li>Four</li></ul><li>Five</li></ul></ul>'
+            '<ul><li>One4<ul><li>Two</li><li>Three<ul><li>Four</li></ul></li><li>Five</li></ul></li></ul>'
         )
     })
 
@@ -235,7 +216,7 @@ describe('parse-and-generate', () => {
         `
 
         expect(parseAndGenerate(input)).toBe(
-            '<ul><li>One5</li><ul><li>Two</li><li>Three</li><ul><li>Four</li></ul></ul></ul>'
+            '<ul><li>One5<ul><li>Two</li><li>Three<ul><li>Four</li></ul></li></ul></li></ul>'
         )
     })
 
@@ -248,7 +229,26 @@ describe('parse-and-generate', () => {
         `
 
         expect(parseAndGenerate(input)).toBe(
-            '<ol start="1"><li>One</li><li>Two</li><ul><li>P1</li><li>P2</li></ul></ol>'
+            '<ol start="1"><li>One</li><li>Two<ul><li>P1</li><li>P2</li></ul></li></ol>'
+        )
+    })
+
+    it('should return a complex nested list while forcing the same list type to siblings', () => {
+        input = `
+            - Super 1
+            1. Super 10
+                3. Super 20
+                    - Super 30 [Google](https://www.google.com/) was.
+                        - Super 40
+                        - Super 41
+                    - Super 31
+                    - Super 32
+                - Super 21
+            - Super 2
+        `
+
+        expect(parseAndGenerate(input)).toBe(
+            '<ul><li>Super 1</li><li>Super 10<ol start="3"><li>Super 20<ul><li>Super 30 <a href="https://www.google.com/">Google</a> was.<ul><li>Super 40</li><li>Super 41</li></ul></li><li>Super 31</li><li>Super 32</li></ul></li><li>Super 21</li></ol></li><li>Super 2</li></ul>'
         )
     })
 

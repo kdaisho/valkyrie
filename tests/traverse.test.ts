@@ -53,19 +53,19 @@ describe('traverse', () => {
                                 type: 'Text',
                                 value: 'one',
                             },
-                        ],
-                    },
-                    {
-                        type: 'List',
-                        symbol: '-',
-                        depth: 2,
-                        children: [
                             {
-                                type: 'ListItem',
+                                type: 'List',
+                                symbol: '-',
+                                depth: 2,
                                 children: [
                                     {
-                                        type: 'Text',
-                                        value: 'two',
+                                        type: 'ListItem',
+                                        children: [
+                                            {
+                                                type: 'Text',
+                                                value: 'two',
+                                            },
+                                        ],
                                     },
                                 ],
                             },
