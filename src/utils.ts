@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { List, ListItem } from '../types'
+import { Anchor, List, ListItem, Text } from '../types'
 
 export const pipe =
     (...fns: ((v: any) => any)[]) =>
@@ -19,59 +19,36 @@ export const getTextBody = (value: string) => {
         .replace(/\s{2,}/g, ' ')
 }
 
-export function buildListHtml(nodes: (List | ListItem)[]) {
+export function buildListHtml(nodes: (List | ListItem | Text | Anchor)[]) {
     let html = ''
 
-    nodes.forEach(n => {
-        if (n.type === 'List' && n.symbol === '-') {
-            html += '<ul>' + buildListHtml(n.children) + '</ul>'
-            return
-        }
-
-        if (n.type === 'List' && n.symbol !== '-') {
-            html +=
-                '<ol start="' +
-                n.symbol +
-                '">' +
-                buildListHtml(n.children) +
-                '</ol>'
-            return
-        }
+    while (nodes.length) {
+        const _node = nodes[0] as ListItem
 
         html += '<li>'
 
-        n.children.forEach(_ => {
-            if (_.type === 'Text') {
-                html += getTextBody(_.value)
+        _node.children.forEach(n => {
+            if (n.type === 'Text') {
+                html += getTextBody(n.value)
             }
 
-            if (_.type === 'Anchor') {
+            if (n.type === 'Anchor') {
                 html +=
-                    `<a href="${_.href}">` +
-                    getTextBody(_.text ?? _.href) +
+                    `<a href="${n.href}">` +
+                    getTextBody(n.text ?? n.href) +
                     '</a>'
             }
 
-            // if (_.type === 'List' && _.symbol === '-') {
-            //     // lol never gets here
-            //     console.log('==>', '======================== 1')
-            //     html += '<ul>' + buildListHtml(_.children) + '</ul>'
-            // }
-
-            // if (_.type === 'List' && _.symbol !== '-') {
-            //     // lol never gets here
-            //     console.log('==>', '======================== 2')
-            //     html +=
-            //         '<ol start="' +
-            //         _.symbol +
-            //         '">' +
-            //         buildListHtml(_.children) +
-            //         '</ol>'
-            // }
+            if (n.type === 'List') {
+                html += n.symbol === '-' ? '<ul>' : '<ol>'
+                html += buildListHtml(n.children)
+                html += n.symbol === '-' ? '</ul>' : '</ol>'
+            }
         })
 
         html += '</li>'
-    })
+        nodes.shift()
+    }
 
     return html
 }
