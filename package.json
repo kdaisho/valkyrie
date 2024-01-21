@@ -6,9 +6,11 @@
     },
     "scripts": {
         "lint": "eslint .",
-        "bd": "bun build ./src/valkyrie.ts --compile --outfile ./bin/valkyrie",
+        "build": "bun build ./src/valkyrie.ts --compile --outfile ./bin/valkyrie",
+        "test": "bun test",
+        "test:only": "bun test --only",
         "compile": "bun build ./src/valkyrie.ts --compile --outfile ./bin/valkyrie && valkyrie run ./examples/simple.md",
-        "out": "bun build ./src/valkyrie.ts --compile --outfile ./bin/valkyrie && sudo cp ./bin/valkyrie /usr/local/bin/"
+        "install": "bun build ./src/valkyrie.ts --compile --outfile ./bin/valkyrie && sudo cp ./bin/valkyrie /usr/local/bin/"
     },
     "dependencies": {
         "chalk": "^5.3.0",

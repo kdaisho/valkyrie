@@ -102,6 +102,7 @@ export default function (input: string) {
             continue
         }
 
+        // comments
         if (
             chars[0] === '<' &&
             chars[1] === '!' &&
@@ -124,8 +125,8 @@ export default function (input: string) {
             continue
         }
 
-        // Paragraph or Heading
         if (isWhitespace(chars[0]) || isCharacter(chars[0])) {
+            // Heading, Image, URL or Paragraph
             let symbol = ''
 
             while (isPoundKey(chars[0])) {
@@ -133,10 +134,24 @@ export default function (input: string) {
                 pop(chars)
             }
 
-            if (symbol && isWhitespace(chars[0])) {
+            if (chars[0] === '!') {
+                symbol += chars[0]
+                pop(chars)
+            }
+
+            if (symbol.startsWith('#') && isWhitespace(chars[0])) {
                 pop(chars)
                 tokens.push({
                     type: 'Heading',
+                    symbol,
+                })
+
+                continue
+            }
+
+            if (symbol === '!' && isOpeningSquareBracket(chars[0])) {
+                tokens.push({
+                    type: 'Image',
                     symbol,
                 })
 
@@ -166,11 +181,10 @@ export default function (input: string) {
                 type: 'Text',
                 value,
             })
-
             continue
         }
 
-        // Anchor without value (https://google.com)
+        // URL without text (https://google.com)
         if (isOpeningBracket(chars[0])) {
             let href = ''
             pop(chars)
@@ -186,7 +200,7 @@ export default function (input: string) {
 
             if (href.startsWith('http://') || href.startsWith('https://')) {
                 tokens.push({
-                    type: 'Anchor',
+                    type: 'URL',
                     href,
                 })
 
@@ -201,7 +215,7 @@ export default function (input: string) {
             }
         }
 
-        // Anchor with value [Google](https://google.com)
+        // URL with text [Google](https://google.com)
         if (isOpeningSquareBracket(chars[0])) {
             let text = chars[0]
             let href = ''
@@ -241,7 +255,7 @@ export default function (input: string) {
             }
 
             tokens.push({
-                type: 'Anchor',
+                type: 'URL',
                 text: text.slice(1, -1),
                 href,
             })
@@ -257,7 +271,7 @@ export default function (input: string) {
         tokens = []
     }
 
-    // console.log('==> lexer', LexicalRepresentation)
+    console.log('==> lexer', LexicalRepresentation)
 
     return LexicalRepresentation
 }

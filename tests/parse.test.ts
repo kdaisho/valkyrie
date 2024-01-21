@@ -33,7 +33,7 @@ describe('parse', () => {
                 { type: 'Heading', symbol: '#' },
                 { type: 'Text', value: 'The link: ' },
                 {
-                    type: 'Anchor',
+                    type: 'URL',
                     text: 'Example',
                     href: 'https://example.com',
                 },
@@ -46,7 +46,7 @@ describe('parse', () => {
                 children: [
                     { type: 'Text', value: 'The link: ' },
                     {
-                        type: 'Anchor',
+                        type: 'URL',
                         text: 'Example',
                         href: 'https://example.com',
                     },
@@ -77,7 +77,7 @@ describe('parse', () => {
                 { type: 'Paragraph' },
                 { type: 'Text', value: 'The link: ' },
                 {
-                    type: 'Anchor',
+                    type: 'URL',
                     text: 'Example',
                     href: 'https://example.com',
                 },
@@ -89,7 +89,7 @@ describe('parse', () => {
                 children: [
                     { type: 'Text', value: 'The link: ' },
                     {
-                        type: 'Anchor',
+                        type: 'URL',
                         text: 'Example',
                         href: 'https://example.com',
                     },
@@ -164,10 +164,10 @@ describe('parse', () => {
     })
 
     it('should parse an anchor', () => {
-        input = [[{ type: 'Anchor', href: 'https://example.com' }]]
+        input = [[{ type: 'URL', href: 'https://example.com' }]]
         const result = [
             {
-                type: 'Anchor',
+                type: 'URL',
                 href: 'https://example.com',
             },
         ]
@@ -179,7 +179,7 @@ describe('parse', () => {
         input = [
             [
                 {
-                    type: 'Anchor',
+                    type: 'URL',
                     text: 'Example',
                     href: 'https://example.com',
                 },
@@ -187,9 +187,40 @@ describe('parse', () => {
         ]
         const result = [
             {
-                type: 'Anchor',
+                type: 'URL',
                 text: 'Example',
                 href: 'https://example.com',
+            },
+        ]
+
+        expect(parse(input)).toEqual(result)
+    })
+
+    it('should parse an image', () => {
+        input = [
+            [
+                {
+                    type: 'Image',
+                    symbol: '!',
+                },
+                {
+                    type: 'URL',
+                    text: 'Example',
+                    href: 'https://example.com',
+                },
+            ],
+        ]
+        const result = [
+            {
+                type: 'Image',
+                symbol: '!',
+                children: [
+                    {
+                        type: 'URL',
+                        text: 'Example',
+                        href: 'https://example.com',
+                    },
+                ],
             },
         ]
 

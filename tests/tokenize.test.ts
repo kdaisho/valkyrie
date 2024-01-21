@@ -101,7 +101,7 @@ describe('tokenize', () => {
         const result = [
             [
                 {
-                    type: 'Anchor',
+                    type: 'URL',
                     href: 'https://example.com',
                 },
             ],
@@ -115,7 +115,7 @@ describe('tokenize', () => {
         const result = [
             [
                 {
-                    type: 'Anchor',
+                    type: 'URL',
                     text: 'Example',
                     href: 'https://example.com',
                 },
@@ -130,7 +130,7 @@ describe('tokenize', () => {
         const result = [
             [
                 {
-                    type: 'Anchor',
+                    type: 'URL',
                     href: 'https://example.com',
                 },
             ],
@@ -155,7 +155,7 @@ describe('tokenize', () => {
                     value: ' ',
                 },
                 {
-                    type: 'Anchor',
+                    type: 'URL',
                     href: 'https://example.com',
                 },
             ],
@@ -177,6 +177,25 @@ describe('tokenize', () => {
             multiline
             comments -->`
         const result: string[] = []
+
+        expect(tokenize(input)).toEqual(result)
+    })
+
+    it('should tokenize an image', () => {
+        const input = '![Example](https://example.com)'
+        const result = [
+            [
+                {
+                    type: 'Image',
+                    symbol: '!',
+                },
+                {
+                    type: 'URL',
+                    text: 'Example',
+                    href: 'https://example.com',
+                },
+            ],
+        ]
 
         expect(tokenize(input)).toEqual(result)
     })

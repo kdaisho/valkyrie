@@ -1,7 +1,8 @@
 import {
     Heading,
+    Image,
     List,
-    Anchor,
+    URL,
     Paragraph,
     Text,
     ListItem,
@@ -25,6 +26,14 @@ function parse(nodes: Token[][]) {
             element = _
         }
 
+        if (first.type === 'Image') {
+            const _ = element as Image
+            _.type = 'Image'
+            _.symbol = first.symbol
+            _.children = rest as URL[]
+            element = _
+        }
+
         if (first.type === 'List') {
             const _ = element as List
             _.type = 'List'
@@ -32,20 +41,20 @@ function parse(nodes: Token[][]) {
             _.depth = first.depth
             const listItem: ListItem = {
                 type: 'ListItem',
-                children: rest as (List | Anchor | Text)[],
+                children: rest as (List | URL | Text)[],
             }
             _.children = [listItem]
             element = _
         }
 
-        if (first.type === 'Anchor' || first.type === 'Whiteline') {
+        if (first.type === 'URL' || first.type === 'Whiteline') {
             element = first
         }
 
         if (first.type === 'Paragraph') {
             const _ = element as Paragraph
             _.type = 'Paragraph'
-            _.children = rest as (Text | Anchor)[]
+            _.children = rest as (Text | URL)[]
             element = _
         }
 
