@@ -25,6 +25,16 @@ function generate(ast: AST) {
             continue
         }
 
+        if (ast[0].type === 'Image') {
+            const { children } = ast[0]
+            const alt = children[0].text
+            const src = children[0].href
+            html += '<img src="' + src + '" alt="' + alt + '" />'
+            ast.shift()
+
+            continue
+        }
+
         if (ast[0].type === 'List' && ast[0].symbol === '-') {
             const { children } = ast[0]
             html += '<ul>' + buildListHtml(children) + '</ul>'
@@ -46,7 +56,7 @@ function generate(ast: AST) {
             continue
         }
 
-        if (ast[0].type === 'Anchor') {
+        if (ast[0].type === 'URL') {
             const { href, text } = ast[0]
             html += '<a href="' + href + '">' + (text ?? href) + '</a>'
             ast.shift()
@@ -59,7 +69,7 @@ function generate(ast: AST) {
             const body = children.reduce((acc, cur) => {
                 if (cur.type === 'Text') {
                     acc += getTextBody(cur.value)
-                } else if (cur.type === 'Anchor') {
+                } else if (cur.type === 'URL') {
                     acc +=
                         '<a href="' +
                         cur.href +

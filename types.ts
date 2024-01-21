@@ -6,7 +6,7 @@ export type Heading = {
 
 export type Paragraph = {
     type: 'Paragraph'
-    children: (Text | Anchor)[]
+    children: (Text | URL)[]
 }
 
 export type Text = {
@@ -23,7 +23,7 @@ export type List = {
 
 export type ListItem = {
     type: 'ListItem'
-    children: (List | Anchor | Text)[]
+    children: (List | URL | Text)[]
 }
 
 export type Whiteline = {
@@ -35,19 +35,26 @@ export type Whiteline = {
 
 // with text
 // [Google](https://google.com) -> <a href="https://google.com">Google</a>
-export type Anchor = {
-    type: 'Anchor'
+export type URL = {
+    type: 'URL'
     href: `https://${string}` | `http://${string}`
     text?: string
 }
 
-export type AST = (Heading | List | Anchor | Paragraph | Text)[]
+export type Image = {
+    type: 'Image'
+    symbol: string
+    children: URL[]
+}
+
+export type AST = (Heading | Image | List | URL | Paragraph | Text)[]
 
 export type Node =
     | Heading
+    | Image
     | List
     | ListItem
-    | Anchor
+    | URL
     | Paragraph
     | Text
     | Whiteline
@@ -55,6 +62,10 @@ export type Node =
 export type Token =
     | {
           type: 'Heading'
+          symbol: string
+      }
+    | {
+          type: 'Image'
           symbol: string
       }
     | {
@@ -73,7 +84,7 @@ export type Token =
           type: 'Whiteline'
       }
     | {
-          type: 'Anchor'
+          type: 'URL'
           href: `https://${string}` | `http://${string}`
           text?: string
       }

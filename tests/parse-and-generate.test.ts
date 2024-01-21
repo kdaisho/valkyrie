@@ -261,4 +261,35 @@ describe('parse-and-generate', () => {
 
         expect(parseAndGenerate(input)).toBe('')
     })
+
+    it('should return <img>', () => {
+        input = '![Alt text](https://example.com/image.jpg)'
+
+        expect(parseAndGenerate(input)).toBe(
+            '<img src="https://example.com/image.jpg" alt="Alt text" />'
+        )
+    })
+
+    it('should return <img> without alt text', () => {
+        input = '![](https://example.com/image.jpg)'
+
+        expect(parseAndGenerate(input)).toBe(
+            '<img src="https://example.com/image.jpg" alt="" />'
+        )
+    })
+
+    it('should return an empty <img>', () => {
+        input = '![]()'
+
+        expect(parseAndGenerate(input)).toBe('<img src="" alt="" />')
+    })
+
+    // TODO: make this happen
+    it('should return an <a> within <p> tag', () => {
+        input = '![Alt text(http://example.com/image.jpg)'
+
+        expect(parseAndGenerate(input)).toBe(
+            '<p>![Alt text<a href="http://example.com/image/jpg">(http://example.com/image/jpg)</a></p>'
+        )
+    })
 })

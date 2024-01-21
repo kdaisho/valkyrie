@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Anchor, List, ListItem, Text } from '../types'
+import { URL, List, ListItem, Text } from '../types'
 
 export const pipe =
     (...fns: ((v: any) => any)[]) =>
@@ -19,7 +19,7 @@ export const getTextBody = (value: string) => {
         .replace(/\s{2,}/g, ' ')
 }
 
-export function buildListHtml(nodes: (List | ListItem | Text | Anchor)[]) {
+export function buildListHtml(nodes: (List | ListItem | Text | URL)[]) {
     let html = ''
 
     while (nodes.length) {
@@ -32,7 +32,7 @@ export function buildListHtml(nodes: (List | ListItem | Text | Anchor)[]) {
                 html += getTextBody(n.value)
             }
 
-            if (n.type === 'Anchor') {
+            if (n.type === 'URL') {
                 html +=
                     `<a href="${n.href}">` +
                     getTextBody(n.text ?? n.href) +

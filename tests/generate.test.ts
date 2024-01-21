@@ -149,7 +149,7 @@ describe('generate', () => {
     it('should generate <a>', () => {
         input = [
             {
-                type: 'Anchor',
+                type: 'URL',
                 href: 'https://google.com',
             },
         ]
@@ -169,7 +169,7 @@ describe('generate', () => {
                         value: 'This is a link to ',
                     },
                     {
-                        type: 'Anchor',
+                        type: 'URL',
                         text: 'Google',
                         href: 'https://google.com',
                     },
@@ -189,7 +189,7 @@ describe('generate', () => {
     it('should generate <a> with text', () => {
         input = [
             {
-                type: 'Anchor',
+                type: 'URL',
                 text: 'Google',
                 href: 'https://google.com',
             },
@@ -213,7 +213,7 @@ describe('generate', () => {
                                 value: 'Item one: ',
                             },
                             {
-                                type: 'Anchor',
+                                type: 'URL',
                                 text: 'Google',
                                 href: 'https://google.com',
                             },
@@ -229,6 +229,26 @@ describe('generate', () => {
 
         expect(generate(input)).toBe(
             '<ul><li>Item one: <a href="https://google.com">Google</a> is a search engine</li></ul>'
+        )
+    })
+
+    it('should generate <img> with alt text', () => {
+        input = [
+            {
+                type: 'Image',
+                symbol: '!',
+                children: [
+                    {
+                        type: 'URL',
+                        text: 'Alt text',
+                        href: 'https://example.com/image.jpg',
+                    },
+                ],
+            },
+        ]
+
+        expect(generate(input)).toBe(
+            '<img src="https://example.com/image.jpg" alt="Alt text" />'
         )
     })
 })
