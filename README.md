@@ -5,6 +5,9 @@
 Valkyrie is a compiler that takes a markdown file and converts them into an HTML file. It is built on top of Bun.js.
 
 ## Contribution guide
+### Tasks
+https://github.com/users/kdaisho/projects/5/views/1
+
 ### Requirements
 
 [Bun.js](https://bun.sh/)
